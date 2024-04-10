@@ -36,45 +36,47 @@
   </head>
 
   <body translate="no">
-    <header>
-      Роботизована система для годування риб з дистанційним керуванням
-    </header>
-    <div class="container">
-      <div class="components" id="1">
-        <div class="clock">
-          <div class="hand hours"></div>
-          <div class="hand minutes"></div>
-          <div class="hand seconds"></div>
-          <div class="point"></div>
-          <div class="marker">
-            <span class="marker__1"></span>
-            <span class="marker__2"></span>
-            <span class="marker__3"></span>
-            <span class="marker__4"></span>
+    <div class="page">
+      <header>
+        Роботизована система для годування риб з дистанційним керуванням
+      </header>
+      <div class="container">
+        <div class="components" id="1">
+          <div class="clock">
+            <div class="hand hours"></div>
+            <div class="hand minutes"></div>
+            <div class="hand seconds"></div>
+            <div class="point"></div>
+            <div class="marker">
+              <span class="marker__1"></span>
+              <span class="marker__2"></span>
+              <span class="marker__3"></span>
+              <span class="marker__4"></span>
+            </div>
+          </div>
+          <div class="btn btn__primary" onclick="feednow()">
+            <p>Погодувати</p>
+          </div>
+          <div class="btn btn__secondary" onclick="toggleDiv()">
+            <p>Запланувати</p>
           </div>
         </div>
-        <div class="btn btn__primary" onclick="feednow()">
-          <p>Погодувати</p>
-        </div>
-        <div class="btn btn__secondary" onclick="toggleDiv()">
-          <p>Запланувати</p>
-        </div>
-      </div>
-      <div class="components2" id="2">
-        <div id="wrapper" class="wrapper"></div>
-        <div class="icon" onclick="addStore()" id="timepicker">
-          <div class="icon__add">
-            <ion-icon name="add"></ion-icon>
+        <div class="components2" id="2">
+          <div id="wrapper" class="wrapper"></div>
+          <div class="icon" onclick="addStore()" id="timepicker">
+            <div class="icon__add">
+              <ion-icon name="add"></ion-icon>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <footer>
-      Студент: Філоненко Дмитро Валерійович ІК-03
-      <br />
-      Дипломний керівник: Араффа Хальдун Осман
-    </footer>
+      <footer>
+        Студент: Філоненко Дмитро Валерійович ІК-03
+        <br />
+        Дипломний керівник: Араффа Хальдун Осман
+      </footer>
+    </div>
     <script id="rendered-js" src="assets/js/script.js"></script>
     <script src="assets/js/mdtimepicker.js"></script>
   </body>
