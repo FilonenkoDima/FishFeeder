@@ -368,6 +368,48 @@ footer {
     padding: 1.2rem;
   }
 
+  /*  ICONS  */
+  .icon {
+    grid-column: 3/4;
+    grid-row: 4/5;
+    display: grid;
+    justify-content: center;
+  }
+  .icon2 {
+    display: none;
+  }
+
+  .icon_arrow {
+    margin: 0 0 2rem 1rem;
+  }
+  .icon__add {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
+      -0.2rem -0.2rem 0.5rem var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--greyDark);
+    transition: all 0.5s ease;
+  }
+  .icon__add:active {
+    box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
+      inset -0.2rem -0.2rem 0.5rem var(--white);
+    color: var(--primary);
+  }
+  .icon__add:hover {
+    cursor: pointer;
+    color: var(--primary);
+  }
+  .icon2 .icon__add:hover {
+    cursor: pointer;
+    color: #d11a2a;
+  }
+
   /*  BUTTONS  */
   .btn {
     width: 15rem;
@@ -424,6 +466,30 @@ footer {
   }
   .btn p {
     font-size: 1.6rem;
+  }
+
+  .icon__return {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    box-shadow: 0.3rem 0.3rem 0.6rem var(--primary-light),
+      -0.2rem -0.2rem 0.5rem var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: var(--white);
+    transition: all 0.5s ease;
+  }
+  .icon__return:active {
+    box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
+      inset -0.2rem -0.2rem 0.5rem var(--white);
+    color: var(--greyDark);
+  }
+  .icon__return:hover {
+    color: var(--greyDark);
   }
 
   /* PROGRESS BAR */

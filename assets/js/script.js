@@ -7,7 +7,7 @@ $(document).ready(function () {
     progressText.textContent = heightPercentage + "%";
   }
 
-  setProgress(90);
+  setProgress(40);
 });
 
 function toggleDiv() {
