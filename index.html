@@ -42,17 +42,14 @@
       </header>
       <div class="container">
         <div class="components" id="1">
-          <div class="clock">
-            <div class="hand hours"></div>
-            <div class="hand minutes"></div>
-            <div class="hand seconds"></div>
-            <div class="point"></div>
-            <div class="marker">
-              <span class="marker__1"></span>
-              <span class="marker__2"></span>
-              <span class="marker__3"></span>
-              <span class="marker__4"></span>
+          <div class="bar__title">
+            <span>В контейнері лишилось корму:</span>
+          </div>
+          <div class="progress-container">
+            <div class="barcontainer">
+              <div class="bar" id="progressBar" style="height: 70%"></div>
             </div>
+            <span class="progressText" id="progressText">70%</span>
           </div>
           <div class="btn btn__primary" onclick="feednow()">
             <p>Погодувати</p>
@@ -62,6 +59,11 @@
           </div>
         </div>
         <div class="components2" id="2">
+          <div class="icon_arrow" onclick="toggleDiv()" id="return__back">
+            <div class="icon__return">
+              <ion-icon name="arrow-back"></ion-icon>
+            </div>
+          </div>
           <div id="wrapper" class="wrapper"></div>
           <div class="icon" onclick="addStore()" id="timepicker">
             <div class="icon__add">
@@ -70,7 +72,6 @@
           </div>
         </div>
       </div>
-
       <footer>
         Студент: Філоненко Дмитро Валерійович ІК-03
         <br />
