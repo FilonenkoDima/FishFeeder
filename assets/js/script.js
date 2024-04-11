@@ -1,15 +1,3 @@
-$(document).ready(function () {
-  const progressBar = document.getElementById("progressBar");
-  const progressText = document.getElementById("progressText");
-
-  function setProgress(heightPercentage) {
-    progressBar.style.height = heightPercentage + "%";
-    progressText.textContent = heightPercentage + "%";
-  }
-
-  setProgress(40);
-});
-
 function toggleDiv() {
   $(".components").toggle();
   $(".components2").toggle();
@@ -28,7 +16,27 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-var countRef = firebase.database().ref("count");
+$(document).ready(function () {
+  let procent;
+  let procentRef = firebase.database().ref("procent");
+
+  procentRef.on("value", function (snapshot) {
+    procent = snapshot.val();
+    if (procent !== null && !isNaN(procent)) {
+      setProgress(Number(procent));
+    }
+  });
+
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+
+  function setProgress(heightPercentage) {
+    progressBar.style.height = heightPercentage + "%";
+    progressText.textContent = heightPercentage + "%";
+  }
+});
+
+let countRef = firebase.database().ref("count");
 countRef.on("value", function (snapshot) {
   count = snapshot.val();
   console.log(count);
