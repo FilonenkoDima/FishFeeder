@@ -40,7 +40,7 @@ body {
 
 /* HEADER */
 header {
-  background: var(--primary);
+  background: #171d3e;
   color: var(--white);
   text-align: left;
   font-weight: 400;
@@ -51,7 +51,7 @@ header {
 
 /* FOOTER */
 footer {
-  background: var(--primary-dark);
+  background: #171d3e;
   color: var(--white);
   margin-top: 7rem;
   padding: 2rem;
@@ -72,7 +72,7 @@ footer {
     justify-content: center;
     align-items: center;
     font-family: "Poppins", sans-serif;
-    background: var(--greyLight-1);
+    background: #d5d5d5;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 10%;
@@ -91,6 +91,7 @@ footer {
     grid-column-gap: 1.5rem;
     grid-row-gap: 2.5rem;
     justify-items: center;
+    background: white;
   }
   .components2 {
     width: 60%;
@@ -101,6 +102,7 @@ footer {
     padding: 4rem;
     align-items: center;
     display: none;
+    background: white;
   }
   .wrapper {
     width: 100%;
@@ -128,7 +130,7 @@ footer {
   .btn {
     width: 15rem;
     height: 4rem;
-    border-radius: 1rem;
+    border-radius: 5rem;
     box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
       -0.2rem -0.2rem 0.5rem var(--white);
     justify-self: center;
@@ -139,7 +141,7 @@ footer {
     transition: 0.3s ease;
   }
   .btn__primary {
-    background: var(--primary);
+    background: #4a07d8;
     box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-light),
       inset -0.2rem -0.2rem 1rem var(--primary-dark),
       0.3rem 0.3rem 0.6rem var(--greyLight-2),
@@ -154,6 +156,8 @@ footer {
       inset -0.2rem -0.2rem 1rem var(--primary-light);
   }
   .btn__secondary {
+    border: solid 0.1rem;
+    border-color: #171d3e;
     color: var(--greyDark);
   }
   .btn__secondary:hover {
@@ -177,6 +181,9 @@ footer {
     font-size: 1.5rem;
   }
   .btn__secondary2 {
+    border-radius: 5rem;
+    border: solid 0.1rem;
+    border-color: #171d3e;
     color: var(--greyDark);
   }
   .btn__secondary2:hover {
@@ -206,6 +213,8 @@ footer {
     color: #d11a2a;
   }
   .icon__add {
+    border: solid 0.1rem;
+    border-color: #171d3e;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -239,7 +248,7 @@ footer {
     align-items: center;
     font-size: 2rem;
     cursor: pointer;
-    background-color: var(--primary);
+    background-color: #171d3e;
     color: var(--white);
     transition: all 0.5s ease;
   }
@@ -261,7 +270,7 @@ footer {
     font-size: 3.5rem;
     font-family: "Poppins", sans-serif;
     margin-left: 4rem;
-    color: var(--greyDark);
+    color: #1f193f;
   }
 
   .progress-container {
@@ -282,7 +291,7 @@ footer {
   }
 
   .bar {
-    background-color: var(--primary);
+    background-color: #1e2754;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -316,7 +325,7 @@ footer {
     justify-content: center;
     align-items: center;
     font-family: "Poppins", sans-serif;
-    background: var(--greyLight-1);
+    background: #d5d5d5;
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 10%;
@@ -335,6 +344,7 @@ footer {
     grid-column-gap: 1.5rem;
     grid-row-gap: 2.5rem;
     align-items: center;
+    background: white;
   }
   .components2 {
     width: 70%;
@@ -345,6 +355,7 @@ footer {
     padding: 4.5rem;
     display: none;
     align-items: center;
+    background: white;
   }
   .wrapper {
     width: 100%;
@@ -368,6 +379,72 @@ footer {
     padding: 1.2rem;
   }
 
+  /*  BUTTONS  */
+  .btn {
+    width: 15rem;
+    height: 4rem;
+    border-radius: 5rem;
+    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
+      -0.2rem -0.2rem 0.5rem var(--white);
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  .btn2 {
+    width: 20rem;
+    height: 6rem;
+    border-radius: 1rem;
+    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
+      -0.2rem -0.2rem 0.5rem var(--white);
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-size: 1.5rem;
+    margin-top: 5%;
+    margin-right: 10%;
+  }
+  .btn__primary {
+    background: #4a07d8;
+    box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-light),
+      inset -0.2rem -0.2rem 1rem var(--primary-dark),
+      0.3rem 0.3rem 0.6rem var(--greyLight-2),
+      -0.2rem -0.2rem 0.5rem var(--white);
+    color: var(--greyLight-1);
+  }
+  .btn__primary:hover {
+    color: var(--white);
+  }
+  .btn__primary:active {
+    box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-dark),
+      inset -0.2rem -0.2rem 1rem var(--primary-light);
+  }
+  .btn__secondary {
+    border: solid 0.1rem;
+    border-color: #171d3e;
+    color: var(--greyDark);
+  }
+  .btn__secondary:hover {
+    color: var(--primary);
+  }
+  .btn__secondary:active {
+    box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
+      inset -0.2rem -0.2rem 0.5rem var(--white);
+  }
+  .btn__secondary2 {
+    border-radius: 5rem;
+    border: solid 0.1rem;
+    border-color: #171d3e;
+    color: var(--greyDark);
+  }
+  .btn p {
+    font-size: 1.6rem;
+  }
+
   /*  ICONS  */
   .icon {
     grid-column: 3/4;
@@ -383,6 +460,8 @@ footer {
     margin: 0 0 2rem 1rem;
   }
   .icon__add {
+    border: solid 0.1rem;
+    border-color: #171d3e;
     width: 4rem;
     height: 4rem;
     border-radius: 50%;
@@ -410,64 +489,6 @@ footer {
     color: #d11a2a;
   }
 
-  /*  BUTTONS  */
-  .btn {
-    width: 15rem;
-    height: 4rem;
-    border-radius: 1rem;
-    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
-      -0.2rem -0.2rem 0.5rem var(--white);
-    justify-self: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.3s ease;
-  }
-  .btn2 {
-    width: 20rem;
-    height: 6rem;
-    border-radius: 1rem;
-    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
-      -0.2rem -0.2rem 0.5rem var(--white);
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.3s ease;
-    font-size: 1.5rem;
-    margin-top: 5%;
-    margin-right: 10%;
-  }
-  .btn__primary {
-    background: var(--primary);
-    box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-light),
-      inset -0.2rem -0.2rem 1rem var(--primary-dark),
-      0.3rem 0.3rem 0.6rem var(--greyLight-2),
-      -0.2rem -0.2rem 0.5rem var(--white);
-    color: var(--greyLight-1);
-  }
-  .btn__primary:hover {
-    color: var(--white);
-  }
-  .btn__primary:active {
-    box-shadow: inset 0.2rem 0.2rem 1rem var(--primary-dark),
-      inset -0.2rem -0.2rem 1rem var(--primary-light);
-  }
-  .btn__secondary {
-    color: var(--greyDark);
-  }
-  .btn__secondary:hover {
-    color: var(--primary);
-  }
-  .btn__secondary:active {
-    box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
-      inset -0.2rem -0.2rem 0.5rem var(--white);
-  }
-  .btn p {
-    font-size: 1.6rem;
-  }
-
   .icon__return {
     width: 4rem;
     height: 4rem;
@@ -479,7 +500,7 @@ footer {
     align-items: center;
     font-size: 2rem;
     cursor: pointer;
-    background-color: var(--primary);
+    background-color: #171d3e;
     color: var(--white);
     transition: all 0.5s ease;
   }
@@ -500,7 +521,7 @@ footer {
     align-items: center;
     font-size: 1.5rem;
     font-family: "Poppins", sans-serif;
-    color: var(--greyDark);
+    color: #1f193f;
   }
 
   .progress-container {
@@ -521,7 +542,7 @@ footer {
   }
 
   .bar {
-    background-color: var(--primary);
+    background-color: #1e2754;
     position: absolute;
     bottom: 0;
     width: 100%;
