@@ -42,20 +42,41 @@
       </header>
       <div class="container">
         <div class="components" id="1">
-          <div class="bar__title">
-            <span>В контейнері лишилось корму:</span>
+          <div class="menu">
+            <div class="settings">
+              <div class="gram-container" id="gram-container">
+                <div class="btn btn__gram" onclick="">
+                  <p>5 грам</p>
+                </div>
+                <div class="icon" onclick="">
+                  <div class="icon__add">
+                    <ion-icon name="add"></ion-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="feed-menu">
+              <div class="time-planner">
+                <div class="text-plan">
+                  <p>
+                    Годувати кожен <span class="">2-ий день</span> о
+                    <span>14:15</span>
+                  </p>
+                </div>
+                <div class="btn btn__secondary" onclick="toggleDiv()">
+                  <p>Запланувати</p>
+                </div>
+              </div>
+              <div class="btn btn__primary feed-button" onclick="feednow()">
+                <p>Погодувати</p>
+              </div>
+            </div>
           </div>
           <div class="progress-container">
             <div class="barcontainer">
               <div class="bar" id="progressBar" style="height: 70%"></div>
             </div>
             <span class="progressText" id="progressText">70%</span>
-          </div>
-          <div class="btn btn__primary" onclick="feednow()">
-            <p>Погодувати</p>
-          </div>
-          <div class="btn btn__secondary" onclick="toggleDiv()">
-            <p>Запланувати</p>
           </div>
         </div>
         <div class="components2" id="2">

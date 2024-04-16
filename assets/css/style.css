@@ -53,7 +53,6 @@ header {
 footer {
   background: #171d3e;
   color: var(--white);
-  margin-top: 7rem;
   padding: 2rem;
   text-align: left;
   font-size: 1.4rem;
@@ -75,8 +74,8 @@ footer {
     background: #d5d5d5;
     margin-top: 0;
     margin-bottom: 0;
-    padding-top: 10%;
-    padding-bottom: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;
   }
   .components {
     width: 60%;
@@ -86,7 +85,7 @@ footer {
       -0.2rem -0.2rem 1.8rem var(--white);
     padding: 4rem;
     display: grid;
-    grid-template-columns: repeat(2, minmax(20rem, 1fr));
+    grid-template-columns: 2fr minmax(2rem, 1fr);
     grid-template-rows: repeat(auto-fit, min-content);
     grid-column-gap: 1.5rem;
     grid-row-gap: 2.5rem;
@@ -197,10 +196,23 @@ footer {
     font-size: 1.6rem;
   }
 
+  .btn__gram {
+    border: solid 0.1rem;
+    border-color: #171d3e;
+    color: var(--greyDark);
+    width: 100%;
+    height: 5rem;
+    justify-items: center;
+    /* display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
+    grid-template-rows: repeat(auto-fit, min-content);*/
+  }
+
   /*  ICONS  */
   .icon {
+    justify-items: center;
+    align-items: center;
     display: grid;
-    justify-content: center;
   }
 
   .icon_arrow {
@@ -208,11 +220,30 @@ footer {
   }
   .icon2 {
     display: none;
+    width: 100%;
   }
   .icon2 .icon__add:hover {
     color: #d11a2a;
   }
   .icon__add {
+    border: solid 0.1rem;
+    border-color: #171d3e;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
+      -0.2rem -0.2rem 0.5rem var(--white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--greyDark);
+    transition: all 0.5s ease;
+    margin: 0;
+  }
+
+  .icon__toggleActive {
     border: solid 0.1rem;
     border-color: #171d3e;
     width: 4rem;
@@ -261,19 +292,83 @@ footer {
     color: var(--greyDark);
   }
 
-  /* PROGRESS BAR */
+  /* MENU CONTAINER */
 
-  .bar__title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 3.5rem;
-    font-family: "Poppins", sans-serif;
-    margin-left: 4rem;
-    color: #1f193f;
+  .menu {
+    width: 100%;
+    align-content: end;
+    margin-top: 0;
+    padding-top: 0;
   }
 
+  .gram-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(content, 1fr));
+    padding: 0;
+    grid-gap: 0.7rem;
+  }
+
+  .weightButtonItem {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0.5rem, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(2rem, 1fr));
+    justify-items: center;
+  }
+
+  .feed-menu {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .time-planner {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(content, 1fr));
+    justify-items: center;
+    align-items: center;
+    padding-bottom: 3rem;
+  }
+
+  .text-plan {
+    width: 100%;
+    padding: 1rem;
+    border: solid #171d3e;
+    border-radius: 2rem;
+    font-family: "Poppins", sans-serif;
+    font-size: 1.2rem;
+    margin: 1rem 0.2rem;
+  }
+
+  .feed-button {
+    width: 15rem;
+    height: 4rem;
+    border-radius: 5rem;
+    background-color: #4a07d8;
+    color: var(--greyLight-1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+
+  .active {
+    background-color: green;
+  }
+
+  /* PROGRESS BAR */
+
   .progress-container {
+    height: 100%;
     display: grid;
     align-items: center;
     overflow: hidden;
@@ -287,7 +382,7 @@ footer {
     transform: translateY(-50%);
     top: 50%;
     width: 15rem;
-    height: 20rem;
+    height: 100%;
   }
 
   .bar {

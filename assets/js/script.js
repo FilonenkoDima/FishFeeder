@@ -51,6 +51,7 @@ function feednow() {
 $(document).ready(function () {
   $("#timepicker").mdtimepicker(); //Initializes the time picker
   addDiv();
+  addDivForWeight();
 });
 
 $("#timepicker")
@@ -103,40 +104,128 @@ function removeDiv(id) {
 }
 
 function addDiv() {
-  var divRef = firebase.database().ref("timers");
+  let divRef = firebase.database().ref("timers");
   divRef.on("value", function (snapshot) {
-    var obj = snapshot.val();
-    var i = 0;
+    let obj = snapshot.val();
+    let i = 0;
     $("#wrapper").html("");
     while (i <= count) {
-      var propertyValues = Object.entries(obj);
+      let propertyValues = Object.entries(obj);
       let ts = propertyValues[i][1]["time"];
       //var timeString = "12:04";
-      var H = +ts.substr(0, 2);
-      var h = H % 12 || 12;
+      let H = +ts.substr(0, 2);
+      let h = H % 12 || 12;
       h = h < 10 ? "0" + h : h; // leading 0 at the left for 1 digit hours
-      var ampm = H < 12 ? " AM" : " PM";
+      let ampm = H < 12 ? " AM" : " PM";
       ts = h + ts.substr(2, 3) + ampm;
       console.log(ts);
 
       const x = `
             <div id=${propertyValues[i][0]}>
                 <div class="btn2 btn__secondary2" onclick=showShort(${propertyValues[i][0]}) id="main_${propertyValues[i][0]}">
-                <div id="time_${propertyValues[i][0]}">
-                ${ts}
-                </div>
-                <div class="icon2" id="short_${propertyValues[i][0]}" onclick=removeDiv(${propertyValues[i][0]})>
+                  <div id="time_${propertyValues[i][0]}">
+                    ${ts}
+                  </div>
+                  <div class="icon2" id="short_${propertyValues[i][0]}" onclick=removeDiv(${propertyValues[i][0]})>
                     <div class="icon__add">
                         <ion-icon name="trash"></ion-icon>
                     </div>
-                </div>
-                </div>
-                
-                
+                  </div>
+                </div>  
             </div>`;
 
       $("#wrapper").append(x);
       i++;
     }
   });
+}
+
+function showShortWeight(key) {
+  $("#data_" + key).toggle();
+  $("#shortWeight_" + key).toggle();
+}
+
+function removeWeightDiv(key) {
+  console.log("remove - " + key);
+}
+
+function addDivForWeight() {
+  let weightRef = firebase.database().ref("weight");
+  weightRef.on("value", function (snapshot) {
+    let weights = snapshot.val();
+
+    // Очистка контейнера перед добавлением новых элементов
+    $("#gram-container").html("");
+
+    // Перебор каждого веса
+    for (let key in weights) {
+      if (weights.hasOwnProperty(key)) {
+        let weight = weights[key];
+        let isActive = weight.active;
+        let weightValue = weight.weight;
+        // Создание кнопки для веса
+        let buttonClass = isActive ? "active" : "";
+        let button = `
+        <div id=${key}>
+          <div class="btn btn__gram ${buttonClass}" onclick="showShortWeight('${key}')">
+            <p id="data_${key}">${weightValue} грам</p>
+            <div class="icon2" id="shortWeight_${key}">
+            <div class="weightButtonItem">
+              <div class="icon__add" onclick=removeWeightDiv('${key}')>
+                <ion-icon name="trash"></ion-icon>
+              </div>
+              <div class="icon__toggleActive" onclick="toggleWeightDiv('${key}');">
+                <ion-icon name="toggle"></ion-icon>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+        // Добавление кнопки в контейнер
+        $("#gram-container").append(button);
+      }
+    }
+    let buttonAdd = `                
+                <div class="icon" onclick="">
+                  <div class="icon__add">
+                    <ion-icon name="add"></ion-icon>
+                  </div>
+                </div>`;
+    $("#gram-container").append(buttonAdd);
+  });
+}
+
+function toggleWeightDiv(weightValue) {
+  let weightRef = firebase.database().ref("weight");
+
+  // Получаем данные о весах из базы данных Firebase
+  weightRef.once("value", function (snapshot) {
+    let weights = snapshot.val();
+
+    // Перебираем каждый вес
+    for (let key in weights) {
+      if (weights.hasOwnProperty(key)) {
+        let weight = weights[key];
+
+        // Если вес активен, меняем его значение на false
+        if (weight.active) {
+          firebase
+            .database()
+            .ref("weight/" + key)
+            .update({ active: false });
+        }
+
+        // Если вес совпадает с выбранным, меняем его значение на true
+        if (key === weightValue) {
+          firebase
+            .database()
+            .ref("weight/" + key)
+            .update({ active: true });
+        }
+      }
+    }
+    // showShort(`${weightValue}`);
+  });
+  addDivForWeight();
 }
