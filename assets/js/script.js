@@ -1,7 +1,5 @@
-function toggleDiv() {
-  $(".components").toggle();
-  $(".components2").toggle();
-}
+var count = 0;
+var countWeight = 0;
 
 const firebaseConfig = {
   apiKey: "AIzaSyA8JH9Ny5klquIcJCZjThBk_SmVyR6GIuQ",
@@ -36,10 +34,52 @@ $(document).ready(function () {
   }
 });
 
-let countRef = firebase.database().ref("count");
-countRef.on("value", function (snapshot) {
-  count = snapshot.val();
-  console.log(count);
+function initCount() {
+  var countRef = firebase.database().ref("/count");
+  countRef.on(
+    "value",
+    function (snapshot) {
+      count = +snapshot.val();
+      console.log("count --- ", count);
+    },
+    function (error) {
+      console.log("Error: " + error.code);
+    }
+  );
+
+  var countWeightRef = firebase.database().ref("/countWeight");
+  countWeightRef.on(
+    "value",
+    function (snapshot) {
+      count = +snapshot.val();
+      console.log("countWeight --- ", count);
+    },
+    function (error) {
+      console.log("Error: " + error.code);
+    }
+  );
+}
+
+$(document).ready(function () {
+  $("#timepicker").mdtimepicker(); //Initializes the time picker
+  addDiv();
+  addDivForWeight();
+
+  initCount();
+
+  $("#timepicker")
+    .mdtimepicker()
+    .on("timechanged", function (e) {
+      let timeValue = e.time.toString();
+      addStore(timeValue);
+      count = count + 1;
+      firebase
+        .database()
+        .ref()
+        .update({
+          count: parseInt(count),
+        });
+    });
 });
 
 function feednow() {
@@ -48,85 +88,84 @@ function feednow() {
   });
 }
 
-$(document).ready(function () {
-  $("#timepicker").mdtimepicker(); //Initializes the time picker
-  addDiv();
-  addDivForWeight();
-});
+function toggleDiv() {
+  $(".components").toggle();
+  $(".components2").toggle();
+}
 
-$("#timepicker")
-  .mdtimepicker()
-  .on("timechanged", function (e) {
-    console.log(e.time);
-    addStore(count, e);
-    count = count + 1;
-    firebase
-      .database()
-      .ref()
-      .update({
-        count: parseInt(count),
-      });
-  });
+function addStore(timeValue) {
+  console.log("count - ", count);
 
-function addStore(count, e) {
   firebase
     .database()
     .ref("timers/timer" + count)
     .set({
-      time: e.time,
+      time: timeValue || null,
     });
   addDiv();
 }
 
 function showShort(id) {
-  var idv = $(id)[0]["id"];
-  $("#time_" + idv).toggle();
-  $("#short_" + idv).toggle();
+  $("#time_" + id).toggle();
+  $("#short_" + id).toggle();
 }
 
 function removeDiv(id) {
-  var idv = $(id)[0]["id"];
   firebase
     .database()
-    .ref("timers/" + idv)
+    .ref("timers/timer" + id)
     .remove();
-  if (count >= 0) {
-    count = count - 1;
-  }
 
-  firebase
-    .database()
-    .ref()
-    .update({
-      count: parseInt(count),
-    });
-  $(id).fadeOut(1, 0).fadeTo(500, 0);
+  setTimeout(5000);
+  console.log(1);
+  // $("#id").fadeOut(1, 0).fadeTo(500, 0);
+  addDiv();
 }
 
 function addDiv() {
   let divRef = firebase.database().ref("timers");
   divRef.on("value", function (snapshot) {
     let obj = snapshot.val();
-    let i = 0;
-    $("#wrapper").html("");
-    while (i <= count) {
-      let propertyValues = Object.entries(obj);
-      let ts = propertyValues[i][1]["time"];
-      //var timeString = "12:04";
-      let H = +ts.substr(0, 2);
-      let h = H % 12 || 12;
-      h = h < 10 ? "0" + h : h; // leading 0 at the left for 1 digit hours
-      let ampm = H < 12 ? " AM" : " PM";
-      ts = h + ts.substr(2, 3) + ampm;
-      console.log(ts);
+    if (obj) {
+      let i = 0;
+      let property = Object.entries(obj);
+      let propertyValues = Object.entries(property);
+      // console.log(propertyValues);
+      $("#wrapper").html("");
 
-      const x = `
-            <div id=${propertyValues[i][0]}>
-                <div class="btn2 btn__secondary2" onclick=showShort(${propertyValues[i][0]}) id="main_${propertyValues[i][0]}">
-                  <div id="time_${propertyValues[i][0]}">
+      while (i < propertyValues.length) {
+        let ts;
+        if (
+          propertyValues[i] &&
+          propertyValues[i][1] &&
+          propertyValues[i][1][1]
+        ) {
+          ts = propertyValues[i][1][1].time;
+        } else ts = "";
+        // console.log("ts - ", i, ts);
+        let H = Number(ts.substr(0, 2));
+        // console.log(H);
+        let h = H % 12 || 12;
+        h = h < 10 ? "0" + h : h; // leading 0 at the left for 1 digit hours
+        let ampm = H < 12 ? " AM" : " PM";
+        ts = h + ts.substr(2, 3) + ampm;
+        // console.log(ts);
+        let val;
+        if (
+          propertyValues[i] &&
+          propertyValues[i][0] &&
+          propertyValues[i][0] !== undefined &&
+          propertyValues[i][0] !== null
+        )
+          val = propertyValues[i][1][0].slice(5);
+        // console.log("val - ", val);
+        const x = `
+            <div id=${val}> 
+                <div class="btn2 btn__secondary2" onclick=showShort(${val}) id="main_${val}">
+                  <div id="time_${val}">
                     ${ts}
                   </div>
-                  <div class="icon2" id="short_${propertyValues[i][0]}" onclick=removeDiv(${propertyValues[i][0]})>
+                  <div class="icon2" id="short_${val}" onclick=removeDiv(${val})>
                     <div class="icon__add">
                         <ion-icon name="trash"></ion-icon>
                     </div>
@@ -134,8 +173,9 @@ function addDiv() {
                 </div>  
             </div>`;
 
-      $("#wrapper").append(x);
-      i++;
+        $("#wrapper").append(x);
+        i++;
+      }
     }
   });
 }
@@ -164,7 +204,7 @@ function addDivForWeight() {
         let isActive = weight.active;
         let weightValue = weight.weight;
         // Создание кнопки для веса
-        let buttonClass = isActive ? "active" : "";
+        let buttonClass = isActive ? "activeWeight" : "";
         let button = `
         <div id=${key}>
           <div class="btn btn__gram ${buttonClass}" onclick="showShortWeight('${key}')">
@@ -199,7 +239,6 @@ function addDivForWeight() {
 function toggleWeightDiv(weightValue) {
   let weightRef = firebase.database().ref("weight");
 
-  // Получаем данные о весах из базы данных Firebase
   weightRef.once("value", function (snapshot) {
     let weights = snapshot.val();
 
@@ -225,7 +264,7 @@ function toggleWeightDiv(weightValue) {
         }
       }
     }
-    // showShort(`${weightValue}`);
   });
+
   addDivForWeight();
 }
