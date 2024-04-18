@@ -93,6 +93,37 @@
           </div>
         </div>
       </div>
+      <div class="modal-container">
+        <div class="modal hidden">
+          <div class="inputText">Вкажіть вагу:</div>
+          <div class="number-input">
+            <button onclick="stepDown()" class="minus"></button>
+            <input
+              type="number"
+              class="inputNumberWeight"
+              id="numberWeight"
+              min="1"
+              max="50"
+              value="1"
+              onkeyup="changeRangeValue(this.value)"
+            />
+            <button onclick="stepUp()" class="plus"></button>
+          </div>
+          <input
+            type="range"
+            min="1"
+            max="50"
+            class="inputRangeWeight"
+            id="rangeWeight"
+            value="1"
+            step="0.1"
+            oninput="changeInputValue(this.value)"
+          />
+          <div class="btn cancelButton" onclick="toggleModal()">Відмінити</div>
+          <div class="btn confirmButton" onclick="addWeight()">Додати</div>
+        </div>
+        <div class="overlay" onclick="toggleModal()"></div>
+      </div>
       <footer>
         Студент: Філоненко Дмитро Валерійович ІК-03
         <br />

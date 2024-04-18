@@ -227,7 +227,7 @@ function addDivForWeight() {
       }
     }
     let buttonAdd = `                
-                <div class="icon" onclick="">
+                <div class="icon" onclick="toggleModal()">
                   <div class="icon__add">
                     <ion-icon name="add"></ion-icon>
                   </div>
@@ -267,4 +267,38 @@ function toggleWeightDiv(weightValue) {
   });
 
   addDivForWeight();
+}
+
+// modal window
+
+function changeRangeValue(val) {
+  document.getElementById("rangeWeight").value = isNaN(parseInt(val, 10))
+    ? 0
+    : parseInt(val, 10);
+  showValue1(val);
+}
+
+function changeInputValue(val) {
+  document.getElementById("numberWeight").value = isNaN(parseInt(val, 10))
+    ? 0
+    : parseInt(val, 10);
+  showValue1(val);
+}
+
+function stepUp() {
+  var input = document.getElementById("numberWeight");
+  var newValue = parseInt(input.value, 10) + 1;
+  input.value = newValue;
+  changeRangeValue(newValue);
+}
+
+function stepDown() {
+  var input = document.getElementById("numberWeight");
+  var newValue = parseInt(input.value, 10) - 1;
+  input.value = newValue;
+  changeRangeValue(newValue);
+}
+
+function toggleModal() {
+  $(".modal-container").toggle();
 }
