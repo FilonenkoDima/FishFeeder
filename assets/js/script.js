@@ -1,6 +1,4 @@
-var count = 0;
-var countWeight = 0;
-
+// інінціалізація зв'язку з базою даних
 const firebaseConfig = {
   apiKey: "AIzaSyA8JH9Ny5klquIcJCZjThBk_SmVyR6GIuQ",
   authDomain: "project-6062561231706985828.firebaseapp.com",
@@ -34,38 +32,23 @@ $(document).ready(function () {
   }
 });
 
-function initCount() {
-  var countRef = firebase.database().ref("/count");
-  countRef.on(
-    "value",
-    function (snapshot) {
-      count = +snapshot.val();
-      console.log("count --- ", count);
-    },
-    function (error) {
-      console.log("Error: " + error.code);
-    }
-  );
-
-  var countWeightRef = firebase.database().ref("/countWeight");
-  countWeightRef.on(
-    "value",
-    function (snapshot) {
-      count = +snapshot.val();
-      console.log("countWeight --- ", count);
-    },
-    function (error) {
-      console.log("Error: " + error.code);
-    }
-  );
-}
+let count;
+let countRef = firebase.database().ref("/count");
+countRef.on(
+  "value",
+  function (snapshot) {
+    count = snapshot.val();
+    console.log("count --- ", count);
+  },
+  function (error) {
+    console.log("Error: " + error.code);
+  }
+);
 
 $(document).ready(function () {
   $("#timepicker").mdtimepicker(); //Initializes the time picker
   addDiv();
   addDivForWeight();
-
-  initCount();
 
   $("#timepicker")
     .mdtimepicker()
@@ -116,7 +99,6 @@ function removeDiv(id) {
     .ref("timers/timer" + id)
     .remove();
 
-  setTimeout(5000);
   console.log(1);
   // $("#id").fadeOut(1, 0).fadeTo(500, 0);
   addDiv();
@@ -142,6 +124,7 @@ function addDiv() {
         ) {
           ts = propertyValues[i][1][1].time;
         } else ts = "";
+        showPlanerInfo(ts);
         // console.log("ts - ", i, ts);
         let H = Number(ts.substr(0, 2));
         // console.log(H);
@@ -176,17 +159,21 @@ function addDiv() {
         $("#wrapper").append(x);
         i++;
       }
-    }
+    } else $(".text-plan").append(`Заплануйте годування риб`);
   });
+}
+
+function showPlanerInfo(time) {
+  let textInfo = `<p>Годувати кожен <span class="">2-ий день</span> о ${time.slice(
+    0,
+    5
+  )}</p>`;
+  $(".text-plan").append(textInfo);
 }
 
 function showShortWeight(key) {
   $("#data_" + key).toggle();
   $("#shortWeight_" + key).toggle();
-}
-
-function removeWeightDiv(key) {
-  console.log("remove - " + key);
 }
 
 function addDivForWeight() {
@@ -214,7 +201,7 @@ function addDivForWeight() {
               <div class="icon__add" onclick=removeWeightDiv('${key}')>
                 <ion-icon name="trash"></ion-icon>
               </div>
-              <div class="icon__toggleActive" onclick="toggleWeightDiv('${key}');">
+              <div class="icon__toggleActive" onclick="toggleWeightActive('${key}');">
                 <ion-icon name="toggle"></ion-icon>
               </div>
               </div>
@@ -236,7 +223,19 @@ function addDivForWeight() {
   });
 }
 
-function toggleWeightDiv(weightValue) {
+function removeWeightDiv(id) {
+  firebase
+    .database()
+    .ref("weight/" + id)
+    .remove();
+
+  console.log(1);
+  // $("#id").fadeOut(1, 0).fadeTo(500, 0);
+  addDivForWeight();
+  console.log("remove - " + id);
+}
+
+function toggleWeightActive(weightKey) {
   let weightRef = firebase.database().ref("weight");
 
   weightRef.once("value", function (snapshot) {
@@ -256,7 +255,7 @@ function toggleWeightDiv(weightValue) {
         }
 
         // Если вес совпадает с выбранным, меняем его значение на true
-        if (key === weightValue) {
+        if (key === weightKey) {
           firebase
             .database()
             .ref("weight/" + key)
@@ -271,18 +270,34 @@ function toggleWeightDiv(weightValue) {
 
 // modal window
 
+let newWeight;
+let countWeight;
+let countWeightRef = firebase
+  .database()
+  .ref("/countWeight")
+  .on(
+    "value",
+    function (snapshot) {
+      countWeight = snapshot.val();
+      console.log("countWeight:", countWeight);
+    },
+    function (error) {
+      console.error("Ошибка получения значения:", error);
+    }
+  );
+
 function changeRangeValue(val) {
   document.getElementById("rangeWeight").value = isNaN(parseInt(val, 10))
     ? 0
     : parseInt(val, 10);
-  showValue1(val);
+  newWeight = val;
 }
 
 function changeInputValue(val) {
   document.getElementById("numberWeight").value = isNaN(parseInt(val, 10))
     ? 0
     : parseInt(val, 10);
-  showValue1(val);
+  newWeight = val;
 }
 
 function stepUp() {
@@ -301,4 +316,29 @@ function stepDown() {
 
 function toggleModal() {
   $(".modal-container").toggle();
+}
+
+function addWeightToFB(newWeight) {
+  firebase
+    .database()
+    .ref("weight/weight" + countWeight)
+    .set({
+      active: false,
+      weight: parseInt(newWeight) || null,
+    });
+}
+
+function addWeight() {
+  if (!newWeight) newWeight = 1;
+  addWeightToFB(newWeight);
+  addDivForWeight();
+  toggleWeightActive(`weight${countWeight}`);
+  countWeight = countWeight + 1;
+  firebase
+    .database()
+    .ref()
+    .update({
+      countWeight: parseInt(countWeight),
+    });
+  toggleModal();
 }

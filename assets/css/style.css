@@ -371,6 +371,7 @@ footer {
     overflow: hidden;
     position: relative;
     border-radius: 1rem;
+    margin-left: 1rem;
   }
 
   .barcontainer {
