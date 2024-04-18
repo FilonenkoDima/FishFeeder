@@ -12,6 +12,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+// завантаження основних елементів сторінки
 $(document).ready(function () {
   let procent;
   let procentRef = firebase.database().ref("procent");
@@ -30,8 +31,13 @@ $(document).ready(function () {
     progressBar.style.height = heightPercentage + "%";
     progressText.textContent = heightPercentage + "%";
   }
+
+  $("#timepicker").mdtimepicker();
+  displayTimer();
+  displayWeight();
 });
 
+// отримання змінної count
 let count;
 let countRef = firebase.database().ref("/count");
 countRef.on(
@@ -45,47 +51,56 @@ countRef.on(
   }
 );
 
-$(document).ready(function () {
-  $("#timepicker").mdtimepicker(); //Initializes the time picker
-  addDiv();
-  addDivForWeight();
-
-  $("#timepicker")
-    .mdtimepicker()
-    .on("timechanged", function (e) {
-      let timeValue = e.time.toString();
-      addStore(timeValue);
-      count = count + 1;
-      firebase
-        .database()
-        .ref()
-        .update({
-          count: parseInt(count),
-        });
-    });
-});
-
-function feednow() {
-  firebase.database().ref().update({
-    feednow: 1,
-  });
-}
-
-function toggleDiv() {
-  $(".components").toggle();
-  $(".components2").toggle();
-}
-
-function addStore(timeValue) {
-  console.log("count - ", count);
-
+// додавання нового таймера
+function addTimerToFB(timeValue) {
+  console.log(timeValue);
   firebase
     .database()
     .ref("timers/timer" + count)
     .set({
       time: timeValue || null,
     });
-  addDiv();
+}
+
+function addStore() {
+  $("#timepicker")
+    .mdtimepicker()
+    .on("timechanged", function (e) {
+      let timeValue = e.time.toString();
+      addTimerToFB(timeValue);
+    });
+
+  count = count + 1;
+  firebase
+    .database()
+    .ref()
+    .update({
+      count: parseInt(count),
+    });
+  displayTimer();
+}
+
+// годування зараз
+function feednow() {
+  firebase.database().ref().update({
+    feednow: 1,
+  });
+}
+
+// видалення таймера
+function removeTimer(id) {
+  firebase
+    .database()
+    .ref("timers/timer" + id)
+    .remove();
+
+  displayTimer();
+}
+
+// функції для перемикання інтерфейсу в таймері
+function toggleDiv() {
+  $(".components").toggle();
+  $(".components2").toggle();
 }
 
 function showShort(id) {
@@ -93,62 +108,32 @@ function showShort(id) {
   $("#short_" + id).toggle();
 }
 
-function removeDiv(id) {
-  firebase
-    .database()
-    .ref("timers/timer" + id)
-    .remove();
-
-  console.log(1);
-  // $("#id").fadeOut(1, 0).fadeTo(500, 0);
-  addDiv();
-}
-
-function addDiv() {
+// виведення таймерів на UI
+function displayTimer() {
   let divRef = firebase.database().ref("timers");
   divRef.on("value", function (snapshot) {
     let obj = snapshot.val();
     if (obj) {
-      let i = 0;
-      let property = Object.entries(obj);
-      let propertyValues = Object.entries(property);
-      // console.log(propertyValues);
       $("#wrapper").html("");
 
-      while (i < propertyValues.length) {
-        let ts;
-        if (
-          propertyValues[i] &&
-          propertyValues[i][1] &&
-          propertyValues[i][1][1]
-        ) {
-          ts = propertyValues[i][1][1].time;
-        } else ts = "";
-        showPlanerInfo(ts);
-        // console.log("ts - ", i, ts);
-        let H = Number(ts.substr(0, 2));
-        // console.log(H);
-        let h = H % 12 || 12;
-        h = h < 10 ? "0" + h : h; // leading 0 at the left for 1 digit hours
-        let ampm = H < 12 ? " AM" : " PM";
-        ts = h + ts.substr(2, 3) + ampm;
-        // console.log(ts);
-        let val;
-        if (
-          propertyValues[i] &&
-          propertyValues[i][0] &&
-          propertyValues[i][0] !== undefined &&
-          propertyValues[i][0] !== null
-        )
-          val = propertyValues[i][1][0].slice(5);
-        // console.log("val - ", val);
-        const x = `
+      for (let key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          let timer = obj[key];
+          let ts = timer.time;
+          showPlanerInfo(ts);
+          let H = Number(ts.substr(0, 2));
+          let h = H % 12 || 12;
+          h = h < 10 ? "0" + h : h;
+          let ampm = H < 12 ? " AM" : " PM";
+          ts = h + ts.substr(2, 3) + ampm;
+          let val = key.slice(5);
+          const x = `
             <div id=${val}> 
                 <div class="btn2 btn__secondary2" onclick=showShort(${val}) id="main_${val}">
                   <div id="time_${val}">
                     ${ts}
                   </div>
-                  <div class="icon2" id="short_${val}" onclick=removeDiv(${val})>
+                  <div class="icon2" id="short_${val}" onclick=removeTimer(${val})>
                     <div class="icon__add">
                         <ion-icon name="trash"></ion-icon>
                     </div>
@@ -156,135 +141,31 @@ function addDiv() {
                 </div>  
             </div>`;
 
-        $("#wrapper").append(x);
-        i++;
+          $("#wrapper").append(x);
+        }
       }
     } else $(".text-plan").append(`Заплануйте годування риб`);
   });
 }
 
+// логіка для текстової інформації від планера
 function showPlanerInfo(time) {
-  let textInfo = `<p>Годувати кожен <span class="">2-ий день</span> о ${time.slice(
-    0,
-    5
-  )}</p>`;
+  let textInfo = `<p>Годувати кожен <span class="">2-ий день</span> о 
+  ${time.slice(0, 5)}</p>`;
   $(".text-plan").append(textInfo);
 }
 
+// функції для перемикання інтерфейсу в задані ваги
 function showShortWeight(key) {
   $("#data_" + key).toggle();
   $("#shortWeight_" + key).toggle();
 }
 
-function addDivForWeight() {
-  let weightRef = firebase.database().ref("weight");
-  weightRef.on("value", function (snapshot) {
-    let weights = snapshot.val();
-
-    // Очистка контейнера перед добавлением новых элементов
-    $("#gram-container").html("");
-
-    // Перебор каждого веса
-    for (let key in weights) {
-      if (weights.hasOwnProperty(key)) {
-        let weight = weights[key];
-        let isActive = weight.active;
-        let weightValue = weight.weight;
-        // Создание кнопки для веса
-        let buttonClass = isActive ? "activeWeight" : "";
-        let button = `
-        <div id=${key}>
-          <div class="btn btn__gram ${buttonClass}" onclick="showShortWeight('${key}')">
-            <p id="data_${key}">${weightValue} грам</p>
-            <div class="icon2" id="shortWeight_${key}">
-            <div class="weightButtonItem">
-              <div class="icon__add" onclick=removeWeightDiv('${key}')>
-                <ion-icon name="trash"></ion-icon>
-              </div>
-              <div class="icon__toggleActive" onclick="toggleWeightActive('${key}');">
-                <ion-icon name="toggle"></ion-icon>
-              </div>
-              </div>
-            </div>
-          </div>
-        </div>`;
-
-        // Добавление кнопки в контейнер
-        $("#gram-container").append(button);
-      }
-    }
-    let buttonAdd = `                
-                <div class="icon" onclick="toggleModal()">
-                  <div class="icon__add">
-                    <ion-icon name="add"></ion-icon>
-                  </div>
-                </div>`;
-    $("#gram-container").append(buttonAdd);
-  });
+function toggleModal() {
+  $(".modal-container").toggle();
 }
 
-function removeWeightDiv(id) {
-  firebase
-    .database()
-    .ref("weight/" + id)
-    .remove();
-
-  console.log(1);
-  // $("#id").fadeOut(1, 0).fadeTo(500, 0);
-  addDivForWeight();
-  console.log("remove - " + id);
-}
-
-function toggleWeightActive(weightKey) {
-  let weightRef = firebase.database().ref("weight");
-
-  weightRef.once("value", function (snapshot) {
-    let weights = snapshot.val();
-
-    // Перебираем каждый вес
-    for (let key in weights) {
-      if (weights.hasOwnProperty(key)) {
-        let weight = weights[key];
-
-        // Если вес активен, меняем его значение на false
-        if (weight.active) {
-          firebase
-            .database()
-            .ref("weight/" + key)
-            .update({ active: false });
-        }
-
-        // Если вес совпадает с выбранным, меняем его значение на true
-        if (key === weightKey) {
-          firebase
-            .database()
-            .ref("weight/" + key)
-            .update({ active: true });
-        }
-      }
-    }
-  });
-
-  addDivForWeight();
-}
-
-// modal window
-
-let newWeight;
-let countWeight;
-let countWeightRef = firebase
-  .database()
-  .ref("/countWeight")
-  .on(
-    "value",
-    function (snapshot) {
-      countWeight = snapshot.val();
-      console.log("countWeight:", countWeight);
-    },
-    function (error) {
-      console.error("Ошибка получения значения:", error);
-    }
-  );
+// функції для керування модальним вікном
 
 function changeRangeValue(val) {
   document.getElementById("rangeWeight").value = isNaN(parseInt(val, 10))
@@ -314,9 +195,107 @@ function stepDown() {
   changeRangeValue(newValue);
 }
 
-function toggleModal() {
-  $(".modal-container").toggle();
+// виведення вагів на UI
+function displayWeight() {
+  let weightRef = firebase.database().ref("weight");
+  weightRef.on("value", function (snapshot) {
+    let weights = snapshot.val();
+
+    $("#gram-container").html("");
+
+    for (let key in weights) {
+      if (weights.hasOwnProperty(key)) {
+        let weight = weights[key];
+        let isActive = weight.active;
+        let weightValue = weight.weight;
+        let buttonClass = isActive ? "activeWeight" : "";
+        let button = `
+        <div id=${key}>
+          <div class="btn btn__gram ${buttonClass}" onclick="showShortWeight('${key}')">
+            <p id="data_${key}">${weightValue} грам</p>
+            <div class="icon2" id="shortWeight_${key}">
+            <div class="weightButtonItem">
+              <div class="icon__add" onclick=removeWeightDiv('${key}')>
+                <ion-icon name="trash"></ion-icon>
+              </div>
+              <div class="icon__toggleActive" onclick="toggleWeightActive('${key}');">
+                <ion-icon name="toggle"></ion-icon>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+
+        $("#gram-container").append(button);
+      }
+    }
+    let buttonAdd = `                
+                <div class="icon" onclick="toggleModal()">
+                  <div class="icon__add">
+                    <ion-icon name="add"></ion-icon>
+                  </div>
+                </div>`;
+    $("#gram-container").append(buttonAdd);
+  });
 }
+
+// видалення вагів
+function removeWeightDiv(id) {
+  firebase
+    .database()
+    .ref("weight/" + id)
+    .remove();
+
+  displayWeight();
+}
+
+// перемикання активної ваги
+function toggleWeightActive(weightKey) {
+  let weightRef = firebase.database().ref("weight");
+
+  weightRef.once("value", function (snapshot) {
+    let weights = snapshot.val();
+
+    for (let key in weights) {
+      if (weights.hasOwnProperty(key)) {
+        let weight = weights[key];
+
+        if (weight.active) {
+          firebase
+            .database()
+            .ref("weight/" + key)
+            .update({ active: false });
+        }
+
+        if (key === weightKey) {
+          firebase
+            .database()
+            .ref("weight/" + key)
+            .update({ active: true });
+        }
+      }
+    }
+  });
+
+  displayWeight();
+}
+
+// оперування з вагою
+let newWeight;
+let countWeight;
+let countWeightRef = firebase
+  .database()
+  .ref("/countWeight")
+  .on(
+    "value",
+    function (snapshot) {
+      countWeight = snapshot.val();
+      console.log("countWeight:", countWeight);
+    },
+    function (error) {
+      console.error("Ошибка получения значения:", error);
+    }
+  );
 
 function addWeightToFB(newWeight) {
   firebase
@@ -328,10 +307,11 @@ function addWeightToFB(newWeight) {
     });
 }
 
+// додавання нової ваги
 function addWeight() {
   if (!newWeight) newWeight = 1;
   addWeightToFB(newWeight);
-  addDivForWeight();
+  displayWeight();
   toggleWeightActive(`weight${countWeight}`);
   countWeight = countWeight + 1;
   firebase
