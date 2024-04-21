@@ -91,6 +91,8 @@ footer {
     grid-row-gap: 2.5rem;
     justify-items: center;
     background: white;
+
+    /* display: none; */
   }
   .components2 {
     width: 60%;
@@ -106,13 +108,11 @@ footer {
   .wrapper {
     width: 100%;
     height: inherit;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    grid-template-rows: repeat(auto-fit, min-content);
-    grid-column-gap: 1.5rem;
-    grid-row-gap: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
     justify-items: center;
     margin-bottom: 5%;
+    margin-top: 2rem;
   }
 
   header {
@@ -167,14 +167,16 @@ footer {
       inset -0.2rem -0.2rem 0.5rem var(--white);
   }
   .btn2 {
-    width: 20rem;
-    height: 6rem;
+    width: 10rem;
+    height: 5rem;
     border-radius: 1rem;
     box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
       -0.2rem -0.2rem 0.5rem var(--white);
-    display: grid;
-    align-items: center;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
     cursor: pointer;
     transition: 0.3s ease;
     font-size: 1.5rem;
@@ -213,11 +215,12 @@ footer {
   }
 
   .icon_arrow {
-    margin: 0 0 2rem 1rem;
+    margin: 0;
   }
   .icon2 {
+    justify-items: center;
+    align-items: center;
     display: none;
-    width: 100%;
   }
   .icon2 .icon__add:hover {
     color: #d11a2a;
@@ -240,22 +243,6 @@ footer {
     margin: 0;
   }
 
-  .icon__toggleActive {
-    border: solid 0.1rem;
-    border-color: #171d3e;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
-      -0.2rem -0.2rem 0.5rem var(--white);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    cursor: pointer;
-    color: var(--greyDark);
-    transition: all 0.5s ease;
-  }
   .icon__add:active {
     box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
       inset -0.2rem -0.2rem 0.5rem var(--white);
@@ -301,7 +288,7 @@ footer {
   .gram-container {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
     grid-template-rows: repeat(auto-fit, minmax(content, 1fr));
     padding: 0;
     grid-gap: 0.7rem;
@@ -666,6 +653,24 @@ footer {
   .cancelButton:active {
     box-shadow: inset 0.2rem 0.2rem 0.5rem var(--greyLight-2),
       inset -0.2rem -0.2rem 0.5rem var(--white);
+  }
+
+  .containerTimer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(content, 1fr));
+    justify-items: center;
+    padding: 0;
+    grid-gap: 1rem;
+    width: 100%;
+    margin: 1rem 0.5rem;
+  }
+
+  .feedText {
+    font-family: "Poppins", sans-serif;
+    font-size: 2rem;
+    color: #1e2754;
+    width: 100%;
   }
 }
 

@@ -45,19 +45,32 @@
           <div class="menu">
             <div class="settings">
               <div class="gram-container" id="gram-container">
-                <div class="btn btn__gram" onclick="">
-                  <p>5 грам</p>
+                <div
+                  class="btn btn__gram"
+                  id="weight10"
+                  onclick="toggleWeightActive('10')"
+                >
+                  <p id="data_10">10 грам</p>
                 </div>
-                <div class="icon" onclick="">
-                  <div class="icon__add">
-                    <ion-icon name="add"></ion-icon>
-                  </div>
+                <div
+                  class="btn btn__gram"
+                  id="weight20"
+                  onclick="toggleWeightActive('20')"
+                >
+                  <p id="data_20">20 грам</p>
+                </div>
+                <div
+                  class="btn btn__gram"
+                  id="weight30"
+                  onclick="toggleWeightActive('30')"
+                >
+                  <p id="data_30">30 грам</p>
                 </div>
               </div>
             </div>
             <div class="feed-menu">
               <div class="time-planner">
-                <div class="text-plan"></div>
+                <div class="text-plan" id="text-plan"></div>
                 <div class="btn btn__secondary" onclick="toggleDiv()">
                   <p>Запланувати</p>
                 </div>
@@ -80,45 +93,50 @@
               <ion-icon name="arrow-back"></ion-icon>
             </div>
           </div>
-          <div id="wrapper" class="wrapper"></div>
-          <div class="icon" onclick="addStore()" id="timepicker">
-            <div class="icon__add">
-              <ion-icon name="add"></ion-icon>
+          <div id="wrapper" class="wrapper">
+            <p class="feedText">Годувати кожен день</p>
+            <div class="containerTimer everyDay" id="timer__weight10"></div>
+            <p class="feedText">Годувати через день</p>
+            <div class="containerTimer per1Day" id="timer__weight20"></div>
+            <p class="feedText">Годувати через 2 дні</p>
+            <div class="containerTimer per2Day" id="timer__weight30"></div>
+          </div>
+          <div class="modal-container">
+            <div class="modal hidden">
+              <div class="inputText">Вкажіть годину:</div>
+              <div class="number-input">
+                <button onclick="stepDown()" class="minus"></button>
+                <input
+                  type="number"
+                  class="inputNumberWeight"
+                  id="numberWeight"
+                  min="0"
+                  max="23"
+                  value="0"
+                  onkeyup="changeRangeValue(this.value)"
+                />
+                <button onclick="stepUp()" class="plus"></button>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="23"
+                class="inputRangeWeight"
+                id="rangeWeight"
+                value="0"
+                step="1"
+                oninput="changeInputValue(this.value)"
+              />
+              <div class="btn cancelButton" onclick="toggleModal()">
+                Відмінити
+              </div>
+              <div class="btn confirmButton" onclick="addStore()">Додати</div>
             </div>
+            <div class="overlay" onclick="toggleModal()"></div>
           </div>
         </div>
       </div>
-      <div class="modal-container">
-        <div class="modal hidden">
-          <div class="inputText">Вкажіть вагу:</div>
-          <div class="number-input">
-            <button onclick="stepDown()" class="minus"></button>
-            <input
-              type="number"
-              class="inputNumberWeight"
-              id="numberWeight"
-              min="1"
-              max="50"
-              value="1"
-              onkeyup="changeRangeValue(this.value)"
-            />
-            <button onclick="stepUp()" class="plus"></button>
-          </div>
-          <input
-            type="range"
-            min="1"
-            max="50"
-            class="inputRangeWeight"
-            id="rangeWeight"
-            value="1"
-            step="0.1"
-            oninput="changeInputValue(this.value)"
-          />
-          <div class="btn cancelButton" onclick="toggleModal()">Відмінити</div>
-          <div class="btn confirmButton" onclick="addWeight()">Додати</div>
-        </div>
-        <div class="overlay" onclick="toggleModal()"></div>
-      </div>
+
       <footer>
         Студент: Філоненко Дмитро Валерійович ІК-03
         <br />
