@@ -209,9 +209,10 @@ footer {
 
   /*  ICONS  */
   .icon {
-    justify-items: center;
+    justify-items: end;
     align-items: center;
     display: grid;
+    width: 100%;
   }
 
   .icon_arrow {
@@ -241,6 +242,11 @@ footer {
     color: var(--greyDark);
     transition: all 0.5s ease;
     margin: 0;
+    align-self: flex-end;
+  }
+
+  .iconAddWeight {
+    align-self: flex-end;
   }
 
   .icon__add:active {
@@ -657,7 +663,7 @@ footer {
 
   .containerTimer {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(9.2rem, 1fr));
     grid-template-rows: repeat(auto-fit, minmax(content, 1fr));
     justify-items: center;
     padding: 0;

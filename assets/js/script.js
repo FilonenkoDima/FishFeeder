@@ -130,7 +130,7 @@ function getDivTimer(key, interval) {
 }
 
 function getAddTimerButton(key) {
-  return `<div class="icon" onclick="toggleModal('${key}')" id="btnAddTimer_${key}">
+  return `<div class="icon iconAddWeight" onclick="toggleModal('${key}')" id="btnAddTimer_${key}">
             <div class="icon__add">
               <ion-icon name="add"></ion-icon>
             </div>
