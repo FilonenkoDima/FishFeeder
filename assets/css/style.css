@@ -132,10 +132,11 @@ footer {
     border-radius: 5rem;
     box-shadow: 0.3rem 0.3rem 0.6rem var(--greyLight-2),
       -0.2rem -0.2rem 0.5rem var(--white);
-    justify-self: center;
     display: flex;
     align-items: center;
+    align-content: center;
     justify-content: center;
+    justify-items: center;
     cursor: pointer;
     transition: 0.3s ease;
   }
@@ -175,8 +176,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    justify-items: center;
-    align-content: center;
     cursor: pointer;
     transition: 0.3s ease;
     font-size: 1.5rem;
@@ -414,7 +413,11 @@ footer {
     background: none;
   }
 
-  .modal-container {
+  .modal-container-time {
+    display: none;
+  }
+
+  .modal-container-day {
     display: none;
   }
 
@@ -442,7 +445,7 @@ footer {
     font-size: 3rem;
     margin: 1rem;
   }
-  .inputNumberWeight {
+  .inputNumber {
     height: 3rem;
     width: 5rem;
     font-family: "Poppins", sans-serif;
@@ -457,8 +460,8 @@ footer {
     appearance: textfield;
   }
 
-  .inputNumberWeight::-webkit-inner-spin-button,
-  .inputNumberWeight::-webkit-outer-spin-button {
+  .inputNumber::-webkit-inner-spin-button,
+  .inputNumber::-webkit-outer-spin-button {
     -webkit-appearance: none;
   }
 
@@ -519,21 +522,21 @@ footer {
     justify-content: center;
   }
 
-  .inputNumberWeight:focus {
+  .inputNumber:focus {
     border: 0.2rem solid #555;
     background-color: lightblue;
   }
 
-  .inputRangeWeight {
+  .inputRange {
     height: 3rem;
     -webkit-appearance: none;
     margin: 1rem 0;
     width: 100%;
   }
-  inputRangeWeight:focus {
+  inputRange:focus {
     outline: none;
   }
-  .inputRangeWeight::-webkit-slider-runnable-track {
+  .inputRange::-webkit-slider-runnable-track {
     width: 100%;
     height: 1rem;
     cursor: pointer;
@@ -543,7 +546,7 @@ footer {
     border-radius: 0.5rem;
     border: 1px solid #000000;
   }
-  .inputRangeWeight::-webkit-slider-thumb {
+  .inputRange::-webkit-slider-thumb {
     box-shadow: 1px 1px 1px #000000;
     border: 1px solid #000000;
     height: 2.7rem;
@@ -554,10 +557,10 @@ footer {
     -webkit-appearance: none;
     margin-top: -11px;
   }
-  .inputRangeWeight:focus::-webkit-slider-runnable-track {
+  .inputRange:focus::-webkit-slider-runnable-track {
     background: #3071a9;
   }
-  .inputRangeWeight::-moz-range-track {
+  .inputRange::-moz-range-track {
     width: 100%;
     height: 10px;
     cursor: pointer;
@@ -567,7 +570,7 @@ footer {
     border-radius: 5px;
     border: 1px solid #000000;
   }
-  .inputRangeWeight::-moz-range-thumb {
+  .inputRange::-moz-range-thumb {
     box-shadow: 1px 1px 1px #000000;
     border: 1px solid #000000;
     height: 30px;
@@ -576,7 +579,7 @@ footer {
     background: #ffffff;
     cursor: pointer;
   }
-  .inputRangeWeight::-ms-track {
+  .inputRange::-ms-track {
     width: 100%;
     height: 10px;
     cursor: pointer;
@@ -585,19 +588,19 @@ footer {
     border-color: transparent;
     color: transparent;
   }
-  .inputRangeWeight::-ms-fill-lower {
+  .inputRange::-ms-fill-lower {
     background: #3071a9;
     border: 1px solid #000000;
     border-radius: 10px;
     box-shadow: 1px 1px 1px #000000;
   }
-  .inputRangeWeight::-ms-fill-upper {
+  .inputRange::-ms-fill-upper {
     background: #3071a9;
     border: 1px solid #000000;
     border-radius: 10px;
     box-shadow: 1px 1px 1px #000000;
   }
-  .inputRangeWeight::-ms-thumb {
+  .inputRange::-ms-thumb {
     margin-top: 1px;
     box-shadow: 1px 1px 1px #000000;
     border: 1px solid #000000;
@@ -607,10 +610,10 @@ footer {
     background: #ffffff;
     cursor: pointer;
   }
-  .inputRangeWeight:focus::-ms-fill-lower {
+  .inputRange:focus::-ms-fill-lower {
     background: #3071a9;
   }
-  .inputRangeWeight:focus::-ms-fill-upper {
+  .inputRange:focus::-ms-fill-upper {
     background: #3071a9;
   }
 
@@ -674,7 +677,15 @@ footer {
     font-family: "Poppins", sans-serif;
     font-size: 2rem;
     color: #1e2754;
-    width: 100%;
+    margin: 1.5rem;
+  }
+
+  .interval-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
   }
 }
 

@@ -35,6 +35,7 @@ $(document).ready(function () {
   displayTimers();
   setActiveWeight();
   showPlanerInfo();
+  showFeedText();
 });
 
 function setActiveWeight() {
@@ -114,6 +115,123 @@ function getDivTimer(interval) {
     </div>`;
 }
 
+function toggleModalTime() {
+  $(".modal-container-time").toggle();
+}
+
+// функції для керування модальним вікном
+
+let newTimeInterval;
+
+function changeRangeTimeValue(val) {
+  document.getElementById("rangeTime").value = isNaN(parseInt(val, 10))
+    ? 0
+    : parseInt(val, 10);
+  newTimeInterval = val;
+}
+
+function changeInputTimeValue(val) {
+  document.getElementById("numberTime").value = isNaN(parseInt(val, 10))
+    ? 0
+    : parseInt(val, 10);
+  newTimeInterval = val;
+}
+
+function stepUpTime() {
+  let input = document.getElementById("numberTime");
+  let newValue = parseInt(input.value, 10) + 1;
+  if (newValue > 23) newValue = 0;
+  input.value = newValue;
+  changeRangeTimeValue(newValue);
+}
+
+function stepDownTime() {
+  let input = document.getElementById("numberTime");
+  let newValue = parseInt(input.value, 10) - 1;
+  if (newValue < 0) newValue = 23;
+  input.value = newValue;
+  changeRangeTimeValue(newValue);
+}
+
+//#region
+
+function toggleModalDay() {
+  $(".modal-container-day").toggle();
+}
+
+let newDayInterval;
+function changeRangeDayValue(val) {
+  document.getElementById("rangeDay").value = isNaN(parseInt(val, 10))
+    ? 0
+    : parseInt(val, 10);
+  newDayInterval = val;
+}
+
+function changeInputDayValue(val) {
+  document.getElementById("numberDay").value = isNaN(parseInt(val, 10))
+    ? 0
+    : parseInt(val, 10);
+  newDayInterval = val;
+}
+
+function stepUpDay() {
+  let input = document.getElementById("numberDay");
+  let newValue = parseInt(input.value, 10) + 1;
+  if (newValue > 30) newValue = 1;
+  input.value = newValue;
+  changeRangeDayValue(newValue);
+}
+
+function stepDownDay() {
+  let input = document.getElementById("numberDay");
+  let newValue = parseInt(input.value, 10) - 1;
+  if (newValue < 1) newValue = 30;
+  input.value = newValue;
+  changeRangeDayValue(newValue);
+}
+
+function changeRepeat() {
+  if (!newDayInterval) newDayInterval = 1;
+  firebase
+    .database()
+    .ref()
+    .update({ repeat: parseInt(newDayInterval) });
+
+  showPlanerInfo();
+  showFeedText();
+  toggleModalDay();
+}
+
+//#endregion
+
+function getIntervalDayText(callback) {
+  firebase
+    .database()
+    .ref("repeat")
+    .once("value", (snapshot) => {
+      let obj = snapshot.val();
+      let interval = parseInt(obj);
+      let result;
+      switch (true) {
+        case interval === 1:
+          result = `Годувати кожен день`;
+          break;
+        case interval === 2:
+          result = `Годувати через 1 день`;
+          break;
+        case interval > 2 && interval < 5:
+          result = `Годувати через ${interval} дні`;
+          break;
+        case interval > 4 && interval < 31:
+          result = `Годувати через ${interval} днів`;
+          break;
+        default:
+          result = "Вкажіть інтервал годування";
+      }
+      callback(result);
+    });
+}
+
 // логіка для текстової інформації від планера
 function showPlanerInfo() {
   $("#text-plan").html("");
@@ -125,54 +243,19 @@ function showPlanerInfo() {
       for (const interval of obj) {
         intervals += `${interval < 10 ? "0" : ""}${interval}:00, `;
       }
-      $(".text-plan").append(`<p>Годувати кожен день о
-  ${intervals.slice(0, -2)}</p>`);
+      getIntervalDayText((result) => {
+        $(".text-plan").append(`<p>${result} о
+        ${intervals.slice(0, -2)}</p>`);
+      });
     }
   });
 }
 
-let activeWeightKey;
-
-function toggleModal(key) {
-  $(".modal-container").toggle();
-  if (key) activeWeightKey = key.toString();
-}
-
-// функції для керування модальним вікном
-
-let newInterval;
-function changeRangeValue(val) {
-  document.getElementById("rangeWeight").value = isNaN(parseInt(val, 10))
-    ? 0
-    : parseInt(val, 10);
-  newInterval = val;
-}
-
-function changeInputValue(val) {
-  document.getElementById("numberWeight").value = isNaN(parseInt(val, 10))
-    ? 0
-    : parseInt(val, 10);
-  newInterval = val;
-}
-
-function stepUp() {
-  let input = document.getElementById("numberWeight");
-  let newValue = parseInt(input.value, 10) + 1;
-  if (newValue > 23) newValue = 0;
-  input.value = newValue;
-  changeRangeValue(newValue);
-}
-
-function stepDown() {
-  let input = document.getElementById("numberWeight");
-  let newValue = parseInt(input.value, 10) - 1;
-  if (newValue < 0) newValue = 23;
-  input.value = newValue;
-  changeRangeValue(newValue);
-}
-
-function compareNumbers(a, b) {
-  return a - b;
+function showFeedText() {
+  $("#feedText").html("");
+  getIntervalDayText((result) => {
+    $("#feedText").append(`<p>${result}`);
+  });
 }
 
 function addStore() {
@@ -182,15 +265,15 @@ function addStore() {
     .once("value")
     .then((snapshot) => {
       let existingArray = snapshot.val() || [];
-      if (!newInterval) newInterval = 0;
-      if (!existingArray.includes(parseInt(newInterval))) {
-        existingArray.push(parseInt(newInterval));
+      if (!newTimeInterval) newTimeInterval = 0;
+      if (!existingArray.includes(parseInt(newTimeInterval))) {
+        existingArray.push(parseInt(newTimeInterval));
         existingArray.sort((a, b) => a - b);
         firebase.database().ref().update({ interval: existingArray });
       }
     });
   displayTimers();
-  toggleModal();
+  toggleModalTime();
 }
 
 // // перемикання активної ваги
@@ -201,8 +284,6 @@ function toggleWeightActive(quantityValue) {
   let quantityRef = firebase.database().ref("quantity");
 
   quantityRef.once("value", function (snapshot) {
-    let weights = snapshot.val();
-
     firebase
       .database()
       .ref()

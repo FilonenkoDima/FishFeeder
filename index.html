@@ -94,47 +94,87 @@
             </div>
           </div>
           <div id="wrapper" class="wrapper">
-            <p class="feedText">Годувати кожен день</p>
-            <div class="containerTimer everyDay" id="timer"></div>
-            <div class="icon iconAddWeight" onclick="toggleModal()" id="">
+            <div class="interval-container">
+              <p class="feedText" id="feedText">Годувати кожен день</p> 
+              <div class="btn btn__primary" onclick="toggleModalDay()">
+                <p>Змінити інтервал</p>
+              </div>
+
+            </div>
+            <div class="containerTimer" id="timer"></div>
+            <div class="icon iconAddWeight" onclick="toggleModalTime()" id="">
             <div class="icon__add">
               <ion-icon name="add"></ion-icon>
             </div>
           </div>
-            </div>`
+            </div>
           </div>
-          <div class="modal-container">
+          <div class="modal-container-time">
             <div class="modal hidden">
               <div class="inputText">Вкажіть годину:</div>
               <div class="number-input">
-                <button onclick="stepDown()" class="minus"></button>
+                <button onclick="stepDownTime()" class="minus"></button>
                 <input
                   type="number"
-                  class="inputNumberWeight"
-                  id="numberWeight"
+                  class="inputNumber"
+                  id="numberTime"
                   min="0"
                   max="23"
                   value="0"
-                  onkeyup="changeRangeValue(this.value)"
+                  onkeyup="changeRangeTimeValue(this.value)"
                 />
-                <button onclick="stepUp()" class="plus"></button>
+                <button onclick="stepUpTime()" class="plus"></button>
               </div>
               <input
                 type="range"
                 min="0"
                 max="23"
-                class="inputRangeWeight"
-                id="rangeWeight"
+                class="inputRange"
+                id="rangeTime"
                 value="0"
                 step="1"
-                oninput="changeInputValue(this.value)"
+                oninput="changeInputTimeValue(this.value)"
               />
-              <div class="btn cancelButton" onclick="toggleModal()">
+              <div class="btn cancelButton" onclick="toggleModalTime()">
                 Відмінити
               </div>
               <div class="btn confirmButton" onclick="addStore()">Додати</div>
             </div>
-            <div class="overlay" onclick="toggleModal()"></div>
+            <div class="overlay" onclick="toggleModalTime()"></div>
+          </div>
+
+          <div class="modal-container-day">
+            <div class="modal hidden">
+              <div class="inputText">Вкажіть інтервал у днях:</div>
+              <div class="number-input">
+                <button onclick="stepDownDay()" class="minus"></button>
+                <input
+                  type="number"
+                  class="inputNumber"
+                  id="numberDay"
+                  min="1"
+                  max="30"
+                  value="1"
+                  onkeyup="changeRangeValue(this.value)"
+                />
+                <button onclick="stepUpDay()" class="plus"></button>
+              </div>
+              <input
+                type="range"
+                min="1"
+                max="30"
+                class="inputRange"
+                id="rangeDay"
+                value="1"
+                step="1"
+                oninput="changeInputDayValue(this.value)"
+              />
+              <div class="btn cancelButton" onclick="toggleModalDay()">
+                Відмінити
+              </div>
+              <div class="btn confirmButton" onclick="changeRepeat()">Змінити інтервал</div>
+            </div>
+            <div class="overlay" onclick="toggleModalDay()"></div>
           </div>
         </div>
       </div>
