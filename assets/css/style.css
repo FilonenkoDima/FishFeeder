@@ -111,7 +111,7 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-items: center;
-    margin-bottom: 5%;
+    margin-bottom: 0;
     margin-top: 2rem;
   }
 
@@ -209,9 +209,11 @@ footer {
 
   /*  ICONS  */
   .icon {
-    justify-items: end;
+    justify-items: center;
     align-items: center;
     display: grid;
+    margin-top: 4rem;
+    margin-bottom: 0;
     width: 100%;
   }
 
@@ -242,10 +244,6 @@ footer {
     color: var(--greyDark);
     transition: all 0.5s ease;
     margin: 0;
-    align-self: flex-end;
-  }
-
-  .iconAddWeight {
     align-self: flex-end;
   }
 
@@ -351,7 +349,7 @@ footer {
     margin-bottom: 0;
   }
 
-  .activeWeight {
+  .activeQuantity {
     background-color: green;
   }
 

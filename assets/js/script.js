@@ -40,10 +40,10 @@ $(document).ready(function () {
 function setActiveWeight() {
   firebase
     .database()
-    .ref("weight/weight10/quantity")
+    .ref("quantity")
     .once("value", function (snapshot) {
       let quantity = snapshot.val();
-      $(`#weight${quantity}`).addClass("activeWeight");
+      $(`#weight${quantity}`).addClass("activeQuantity");
     });
 }
 
@@ -55,28 +55,19 @@ function feednow() {
 }
 
 // видалення таймера
-function removeTimer(id) {
-  const keyData = id.split("_");
-  console.log(keyData[0], keyData[1]);
-
+function removeTimer(value) {
   firebase
     .database()
-    .ref(`weight/${keyData[0]}/interval`)
+    .ref(`interval`)
     .once("value")
     .then((snapshot) => {
       let existingArray = snapshot.val() || [];
-      if (existingArray.includes(parseInt(keyData[1]))) {
-        console.log("existingArray - ", existingArray);
-        const index = existingArray.indexOf(parseInt(keyData[1]));
-        console.log("index - ", index);
+      if (existingArray.includes(parseInt(value))) {
+        const index = existingArray.indexOf(parseInt(value));
         if (index > -1) {
           existingArray.splice(index, 1);
         }
-        console.log("new existingArray - ", existingArray);
-        firebase
-          .database()
-          .ref(`weight/${keyData[0]}`)
-          .update({ interval: existingArray });
+        firebase.database().ref().update({ interval: existingArray });
       }
     });
   displayTimers();
@@ -96,75 +87,46 @@ function showShort(id) {
 // виведення таймерів на UI
 
 function displayTimers() {
-  let divRef = firebase.database().ref("weight");
+  let divRef = firebase.database().ref("interval");
   divRef.on("value", function (snapshot) {
     let obj = snapshot.val();
     if (obj) {
-      for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          $(`#timer__${key}`).html("");
-          let intervals = obj[key].interval;
-          if (intervals)
-            for (const interval of intervals) {
-              $(`#timer__${key}`).append(getDivTimer(key, interval));
-            }
-          $(`#timer__${key}`).append(getAddTimerButton(`${key}`));
+      $(`#timer`).html("");
+      if (obj)
+        for (const interval of obj) {
+          $(`#timer`).append(getDivTimer(interval));
         }
-      }
     }
   });
 }
 
-function getDivTimer(key, interval) {
+function getDivTimer(interval) {
   return `
-                <div class="btn2 btn__secondary2" onclick=showShort("${key}_${interval}") id="${key}_${interval}">
-                  <div id="time_${key}_${interval}">
-                    ${interval}
-                  </div>
-                  <div class="icon2" id="short_${key}_${interval}" onclick=removeTimer('${key}_${interval}')>
-                    <div class="icon__add">
-                        <ion-icon name="trash"></ion-icon>
-                    </div>
-                  </div>
-            </div>`;
-}
-
-function getAddTimerButton(key) {
-  return `<div class="icon iconAddWeight" onclick="toggleModal('${key}')" id="btnAddTimer_${key}">
-            <div class="icon__add">
-              <ion-icon name="add"></ion-icon>
-            </div>
-          </div>`;
+    <div class="btn2 btn__secondary2" onclick=showShort("${interval}") id="${interval}">
+      <div id="time_${interval}">
+        ${interval < 10 ? "0" : ""}${interval}:00
+      </div>
+      <div class="icon2" id="short_${interval}" onclick=removeTimer('${interval}')>
+        <div class="icon__add">
+            <ion-icon name="trash"></ion-icon>
+        </div>
+      </div>
+    </div>`;
 }
 
 // логіка для текстової інформації від планера
 function showPlanerInfo() {
   $("#text-plan").html("");
-  let divRef = firebase.database().ref("weight");
+  let divRef = firebase.database().ref("interval");
   divRef.on("value", function (snapshot) {
     let obj = snapshot.val();
     if (obj) {
-      for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          let intervals = obj[key].interval;
-          if (intervals) {
-            switch (key) {
-              case "weight10":
-                $(".text-plan").append(`<p>Годувати кожен день о
-  ${intervals.join(", ")}</p>`);
-                break;
-              case "weight20":
-                $(".text-plan").append(`<p>Годувати через день о
-  ${intervals.join(", ")}</p>`);
-                break;
-              case "weight30":
-                $(".text-plan").append(`<p>Годувати через 2 дні о
-  ${intervals.join(", ")}</p>`);
-                break;
-            }
-          }
-        }
+      let intervals = "";
+      for (const interval of obj) {
+        intervals += `${interval < 10 ? "0" : ""}${interval}:00, `;
       }
+      $(".text-plan").append(`<p>Годувати кожен день о
+  ${intervals.slice(0, -2)}</p>`);
     }
   });
 }
@@ -209,20 +171,22 @@ function stepDown() {
   changeRangeValue(newValue);
 }
 
+function compareNumbers(a, b) {
+  return a - b;
+}
+
 function addStore() {
   firebase
     .database()
-    .ref(`weight/${activeWeightKey}/interval`)
+    .ref(`interval`)
     .once("value")
     .then((snapshot) => {
       let existingArray = snapshot.val() || [];
       if (!newInterval) newInterval = 0;
       if (!existingArray.includes(parseInt(newInterval))) {
         existingArray.push(parseInt(newInterval));
-        firebase
-          .database()
-          .ref(`weight/${activeWeightKey}`)
-          .update({ interval: existingArray });
+        existingArray.sort((a, b) => a - b);
+        firebase.database().ref().update({ interval: existingArray });
       }
     });
   displayTimers();
@@ -230,22 +194,18 @@ function addStore() {
 }
 
 // // перемикання активної ваги
-function toggleWeightActive(weightKey) {
-  $("#gram-container").children().removeClass("activeWeight");
-  $(`#weight${weightKey}`).addClass("activeWeight");
+function toggleWeightActive(quantityValue) {
+  $("#gram-container").children().removeClass("activeQuantity");
+  $(`#weight${quantityValue}`).addClass("activeQuantity");
 
-  let weightRef = firebase.database().ref("weight");
+  let quantityRef = firebase.database().ref("quantity");
 
-  weightRef.once("value", function (snapshot) {
+  quantityRef.once("value", function (snapshot) {
     let weights = snapshot.val();
 
-    for (let key in weights) {
-      if (weights.hasOwnProperty(key)) {
-        firebase
-          .database()
-          .ref("weight/" + key)
-          .update({ quantity: parseInt(weightKey) });
-      }
-    }
+    firebase
+      .database()
+      .ref()
+      .update({ quantity: parseInt(quantityValue) });
   });
 }
