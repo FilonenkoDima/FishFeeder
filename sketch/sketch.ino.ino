@@ -2,16 +2,6 @@
 
 Servo servo; // Объявляем объект servo
 
-// void setup() {
-//   // put your setup code here, to run once:
-//   servo.attach(15); // Прикрепляем сервопривод к пину 15
-// }
-
-// void loop() {
-//   // put your main code here, to run repeatedly:
-
-//   servo.write(360); 
-// }
 
 const int IRpin = 15;          // аналоговый пин для подключения выхода Vo сенсора
 int value1;                    // для хранения аналогового значения
