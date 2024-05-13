@@ -1,0 +1,63 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure Fish Feeder</title>
+</head>
+<body>
+    <h1>Fish Feeder Configuration</h1>
+    <form id="configForm">
+        <label for="qty">Quantity:</label>
+        <input type="number" id="qty" name="qty"><br>
+
+        <label for="times">Times (comma-separated, e.g., 14:40,21:00,11:00):</label>
+        <input type="text" id="times" name="times"><br>
+
+        <label for="repeat">Repeat:</label>
+        <input type="number" id="repeat" name="repeat"><br>
+
+        <button type="button" onclick="updateConfig()">Update Configuration</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchConfig();
+        });
+
+        function fetchConfig() {
+            fetch('/config')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('qty').value = data.qty;
+                document.getElementById('times').value = data.times.join(',');
+                document.getElementById('repeat').value = data.repeat;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function updateConfig() {
+            const config = {
+                qty: parseInt(document.getElementById('qty').value, 10),
+                times: document.getElementById('times').value.split(',').map(time => time.trim()),
+                repeat: parseInt(document.getElementById('repeat').value, 10)
+            };
+
+            fetch('/config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.text())
+            .then(result => {
+                alert('Configuration updated successfully');
+                fetchConfig(); // Re-fetch the configuration to ensure the page displays the updated values
+            })
+            .catch(error => console.error('Error updating configuration:', error));
+        }
+    </script>
+</body>
+</html>
