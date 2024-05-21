@@ -1,10 +1,12 @@
 {
-  "qty": 4,
-  "times": [
-    "14:40",
-    "21:00",
-    "11:00",
-    "13:00"
-  ],
-  "repeat": 3
+  "quantity": 20,
+  "procent": 60,
+  "feedNow": 0,
+  "repeat": 3,
+  "interval": [
+    0,
+    4,
+    5,
+    7
+  ]
 }
