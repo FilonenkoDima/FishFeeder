@@ -1,12 +1,11 @@
 {
-  "quantity": 20,
+  "quantity": 30,
   "procent": 60,
-  "feedNow": 0,
-  "repeat": 30,
+  "feedNow": 1,
+  "repeat": 3,
   "interval": [
     0,
-    4,
-    7,
+    2,
     10,
     23
   ]

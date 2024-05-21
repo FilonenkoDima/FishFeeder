@@ -1,5 +1,6 @@
 //#region server function
 
+// Initialize the page when DOM content is loaded
 document.addEventListener("DOMContentLoaded", initializePage);
 
 function initializePage() {
@@ -66,6 +67,8 @@ function getConfig() {
 
 //#region progressBar
 
+// Progress bar handling
+
 const progressBar = document.getElementById("progressBar");
 const progressText = document.getElementById("progressText");
 
@@ -79,6 +82,7 @@ function setProgress(heightPercentage) {
 
 //#region set active weight
 
+// Toggle active weight
 function toggleWeightActive(quantityValue) {
   $("#gram-container").children().removeClass("activeQuantity");
   $(`#weight${quantityValue}`).addClass("activeQuantity");
@@ -89,8 +93,9 @@ function toggleWeightActive(quantityValue) {
 
 //#region feed now button
 
+// Feed now button
 let feed = 0;
-function feednow() {
+function feedNow() {
   feed = 1;
   updateConfig();
 }
@@ -99,6 +104,7 @@ function feednow() {
 
 //#region planner info
 
+// Planner info handling
 function getRepeatDay() {
   const text = document.getElementById("feedText").textContent;
   if (text === "Годувати кожен день") return 1;
@@ -135,6 +141,7 @@ function showPlanerInfo(repeat, interval) {
 
 //#region toggle window
 
+// Toggle window
 function toggleDiv() {
   $(".components, .components2").toggle();
 }
@@ -143,6 +150,7 @@ function toggleDiv() {
 
 //#region change interval
 
+// Change interval handling
 function toggleModalDay() {
   $(".modal-container-day").toggle();
 }
@@ -195,6 +203,7 @@ function showFeedText(interval) {
 
 //#region show timers
 
+// Show timers handling
 function showShort(id) {
   $(`#time_${id}, #short_${id}`).toggle();
 }
@@ -234,6 +243,7 @@ function removeTimer(timer) {
 
 //#region add new timer
 
+// Add new timer handling
 let newTimeInterval;
 
 function changeRangeTimeValue(val) {
@@ -265,10 +275,11 @@ function adjustTimeValue(step) {
 }
 
 function addStore() {
-  const timers = getInterval();
+  let timers = new Set(getInterval());
   newTimeInterval = newTimeInterval || 0;
 
-  timers.push(parseInt(newTimeInterval, 10));
+  timers.add(parseInt(newTimeInterval, 10));
+  timers = Array.from(timers);
   displayTimers(timers.sort((a, b) => a - b));
   toggleModalTime();
   showPlanerInfo(timers, newDayInterval || getRepeatDay());
