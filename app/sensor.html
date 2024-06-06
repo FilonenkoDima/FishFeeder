@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Client</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #messages { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h2>WebSocket Test Client</h2>
+    <button onclick="connect()">Connect to WebSocket</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <div id="status">Status: Disconnected</div>
+    <div id="messages"></div>
+
+    <script>
+        let socket;
+        const messagesDiv = document.getElementById('messages');
+        const statusDiv = document.getElementById('status');
+
+        function connect() {
+            // Change "ws://100.75.84.9:3000/" to your WebSocket server URL
+          //  socket = new WebSocket('ws://100.75.84.9:3000/');
+            socket = new WebSocket('ws://fishfeeder-824j.onrender.com:3000');
+
+
+            // Connection opened
+            socket.addEventListener('open', function (event) {
+                statusDiv.textContent = 'Status: Connected';
+            });
+
+            // Listen for messages
+            socket.addEventListener('message', function (event) {
+                console.log('Message from server ', event.data);
+                const message = document.createElement('div');
+                message.textContent = 'Received: ' + event.data;
+                messagesDiv.appendChild(message);
+            });
+
+            // Listen for possible errors
+            socket.addEventListener('error', function (event) {
+                statusDiv.textContent = 'Status: Error';
+                console.log('WebSocket error: ', event);
+            });
+
+            // Connection closed
+            socket.addEventListener('close', function (event) {
+                statusDiv.textContent = 'Status: Disconnected';
+                console.log('WebSocket closed: ', event);
+            });
+        }
+
+        function disconnect() {
+            if (socket) {
+                socket.close();
+            }
+        }
+    </script>
+</body>
+</html>
