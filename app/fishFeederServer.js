@@ -11,14 +11,42 @@ const wss = new WebSocket.Server({ server });
 
 const filePath = "./data.json"; // Path to the JSON file that stores your configuration
 
+// Store connections by device ID
+const connections = {};
+
 // WebSocket connection handler
-wss.on('connection', function connection(ws) {
-    console.log("A new client Connected!");
-    ws.send('Welcome New Client!');
+wss.on('connection', function connection(ws, req) {
+    let deviceId = null;
 
     ws.on('message', function incoming(message) {
-        console.log('received: %s', message);
-        // You can broadcast to all clients or handle messages here
+        // Convert message to string
+        const messageStr = message.toString();
+
+        // Check if the message is a device ID assignment
+        if (!deviceId && messageStr.startsWith('deviceId:')) {
+            deviceId = messageStr.split(':')[1];
+            connections[deviceId] = ws;
+            ws.send(`Device ${deviceId} connected`);
+            console.log(`Device ${deviceId} connected`);
+            return;
+        }
+
+        // Process message if deviceId is known
+        if (deviceId) {
+            console.log(`Received from ${deviceId}: ${messageStr}`);
+
+            // Broadcast to all clients
+            wss.clients.forEach(function each(client) {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(`${deviceId}: ${messageStr}`);
+                }
+            });
+        }
+    });
+
+    ws.on('close', () => {
+        console.log(`Device ${deviceId} disconnected`);
+        delete connections[deviceId]; // Remove the connection when the client disconnects
     });
 });
 

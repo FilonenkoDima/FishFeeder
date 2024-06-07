@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <h1>WebSocket Client - desktop</h1>
+    <div id="messages"></div>
+    <script>
+        const deviceId = 'desktop'; // Set your device ID here
+        const socket = new WebSocket('ws://localhost:3000');
+
+        // Connection opened
+        socket.addEventListener('open', function (event) {
+            console.log('Connected to WebSocket server');
+            socket.send(`deviceId:${deviceId}`); // Send device ID to the server
+        });
+
+        // Listen for messages
+        socket.addEventListener('message', function (event) {
+            console.log('Message from server', event.data);
+
+            // Display received message in the messages div
+            const messagesDiv = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = event.data; // Ensure data is treated as text
+            messagesDiv.appendChild(messageElement);
+        });
+
+        // Connection closed
+        socket.addEventListener('close', function (event) {
+            console.log('Disconnected from WebSocket server');
+        });
+
+        // Handle errors
+        socket.addEventListener('error', function (event) {
+            console.error('WebSocket error observed:', event);
+        });
+    </script>
+</body>
+</html>

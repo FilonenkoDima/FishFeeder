@@ -3,6 +3,7 @@
 // Initialize the page when DOM content is loaded
 document.addEventListener("DOMContentLoaded", initializePage);
 
+
 function initializePage() {
   fetchConfig();
   $(document).ready(() => {
@@ -285,5 +286,6 @@ function addStore() {
   showPlanerInfo(timers, newDayInterval || getRepeatDay());
   updateConfig();
 }
+
 
 //#endregion
