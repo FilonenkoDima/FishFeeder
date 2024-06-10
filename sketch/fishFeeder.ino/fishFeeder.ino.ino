@@ -13,7 +13,7 @@ const char* password = "20010227"; // WiFi password
 const char* serverURL = "https://fishfeeder-824j.onrender.com/config"; // URL of server
 #define FORMAT_SPIFFS_IF_FAILED true
 const char* FILE_NAME = "/data.json";
-const float depthOfContainer = 15.0;
+const float depthOfContainer = 7.5;
 
 const int IRpin = 34;          // аналоговый пин для подключения выхода Vo сенсора
 int value1;                    // для хранения аналогового значения  
@@ -29,20 +29,18 @@ struct tm startTimeInfo;
 
 
 
-// Усреднение нескольких значений для сглаживания
 float irRead() {
-  int averaging = 0;             //  переменная для суммирования данных
+  int averaging = 0;             
  
-  // Получение 5 значений
   for (int i=0; i<5; i++) {
     value1 = analogRead(IRpin);
     averaging = averaging + value1;
-    delay(55);      // Ожидание 55 ms перед каждым чтением
+    delay(55);      
   }
-  value1 = averaging / 5;      // усреднить значения
+  value1 = averaging / 5;      
 
    float volts = value1 * 0.0048828125;
- // и в расстояние в см 
+
  float distance=32*pow(volts,-1.10);
 
  distance = distance > depthOfContainer ? depthOfContainer : distance;
@@ -55,7 +53,7 @@ int FeedNow(int portionSize){
         // servo
         myServo.attach(15);
         myServo.write(0); 
-        int portion = portionSize * 100;
+        int portion = portionSize * 600;
         delay(portion); 
         myServo.detach();
 
@@ -214,7 +212,7 @@ void loop() {
 
     Serial.println((int)(irRead() / depthOfContainer * 100));
 
-    if(jsonFromESP["procent"] != (int)(irRead() / depthOfContainer * 100)){
+    if(jsonFromESP["procent"] != 100 - (int)(irRead() / depthOfContainer * 100)){
 
       jsonFromESP["procent"] = (int)(irRead() / depthOfContainer * 100);
       serializeJson(jsonFromESP, docFromESP);
