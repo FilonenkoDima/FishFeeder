@@ -1,11 +1,12 @@
 //#region server function
-const SERVER = "127.0.0.1:3000";
+//const SERVER = "127.0.0.1:3000";
+const SERVER = "fishfeeder-824j.onrender.com";
 const FeederID = "esp32-1";
 
 // connetect to websocket server
 //--------------------- Start of WebSocket connection ---------------------
 const deviceId = 'Web'; // Set your device ID here
-const socket = new WebSocket('ws://'+SERVER);
+const socket = new WebSocket('wss://'+SERVER);
 
 // Connection opened
 socket.addEventListener('open', function (event) {
