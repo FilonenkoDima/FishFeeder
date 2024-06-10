@@ -10,8 +10,8 @@ console.log('port'+    process.env.PORT )
 
 // Create an HTTP server from express app
 const server = http.createServer(app);
-// const wss = new WebSocket.Server({ server });
-const wss = new WebSocket.Server({ port: PORT });
+const wss = new WebSocket.Server({ server });
+// const wss = new WebSocket.Server({ port: PORT });
 
 
 
