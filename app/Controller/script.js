@@ -58,7 +58,7 @@ function initializePage() {
 // Fetches configuration from the server
 async function fetchConfig() {
   try {
-    const response = await fetch('http://'+SERVER+'/config');
+    const response = await fetch('https://'+SERVER+'/config');
     if (!response.ok) { // Check if the response is successful
       throw new Error('Network response was not ok ' + response.statusText);
     }
@@ -82,7 +82,7 @@ async function updateConfig() {
   const config = getConfig();
 
   try {
-    const response = await fetch('http://'+SERVER+'/config', {
+    const response = await fetch('https://'+SERVER+'/config', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
