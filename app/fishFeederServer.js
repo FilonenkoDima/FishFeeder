@@ -1,8 +1,12 @@
+const cors = require('cors');
+
 const express = require("express");
 const fs = require("fs");
 const http = require("http");
 const WebSocket = require('ws');
 const app = express();
+app.use(cors());
+
 const PORT = process.env.PORT || 3000;
 console.log('port'+    process.env.PORT )
 

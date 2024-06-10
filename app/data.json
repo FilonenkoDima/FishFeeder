@@ -1,7 +1,7 @@
 {
   "quantity": 30,
   "procent": 80,
-  "feedNow": 1,
+  "feedNow": 0,
   "repeat": 1,
   "interval": [
     7,
