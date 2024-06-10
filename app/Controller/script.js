@@ -1,6 +1,6 @@
 //#region server function
 //const SERVER = "127.0.0.1:3000";
-const SERVER = "fishfeeder-824j.onrender.com";
+const SERVER = "fishfeeder-824j.onrender.com/";
 const FeederID = "esp32-1";
 
 // connetect to websocket server
@@ -82,7 +82,7 @@ async function updateConfig() {
   const config = getConfig();
 
   try {
-    const response = await fetch('https://'+SERVER+'/config', {
+    const response = await fetch('http://'+SERVER+'/config', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
