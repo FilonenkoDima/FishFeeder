@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
-console.log('port  '+    process.env.PORT )
+console.log('port'+    process.env.PORT )
 
 // const PORT = 3000;
 
@@ -31,7 +31,6 @@ wss.on('connection', function connection(ws, req) {
     ws.on('message', function incoming(message) {
         // Convert message to string
         const messageStr = message.toString();
-        console.log('messageStr', messageStr)
 
         // Check if the message is a device ID assignment
         if (!deviceId && messageStr.startsWith('deviceId:')) {
