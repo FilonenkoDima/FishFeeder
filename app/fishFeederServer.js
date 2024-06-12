@@ -28,19 +28,24 @@ wss.on('connection', function connection(ws, req) {
         // Check if the message is a device ID assignment
         if (!deviceId && messageStr.startsWith('deviceId:')) {
             deviceId = messageStr.split(':')[1];
-            connections[deviceId] = ws;
-            ws.send(`${deviceId} connected`);
-            console.log(`Device ${deviceId} connected`);
+            if (deviceId === 'esp32-1' || deviceId === 'web') {
+                connections[deviceId] = ws;
+                ws.send(`${deviceId} connected`);
+                console.log(`Device ${deviceId} connected`);
+            } else {
+                ws.send(`Invalid deviceId: ${deviceId}`);
+                ws.close();
+            }
             return;
         }
 
-        // Process message if deviceId is known
-        if (deviceId) {
+        // Process message if deviceId is known and valid
+        if (deviceId === 'esp32-1' || deviceId === 'web') {
             console.log(`Received from ${deviceId}: ${messageStr}`);
 
-            // Broadcast to all clients except the sender
+            // Broadcast to all clients
             wss.clients.forEach(function each(client) {
-                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                if (client.readyState === WebSocket.OPEN) {
                     client.send(`${deviceId}: ${messageStr}`);
                 }
             });
@@ -48,8 +53,10 @@ wss.on('connection', function connection(ws, req) {
     });
 
     ws.on('close', () => {
-        console.log(`Device ${deviceId} disconnected`);
-        delete connections[deviceId]; // Remove the connection when the client disconnects
+        if (deviceId) {
+            console.log(`Device ${deviceId} disconnected`);
+            delete connections[deviceId]; // Remove the connection when the client disconnects
+        }
     });
 });
 
