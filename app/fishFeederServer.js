@@ -31,7 +31,7 @@ wss.on('connection', function connection(ws, req) {
     ws.on('message', function incoming(message) {
         // Convert message to string
         const messageStr = message.toString();
-        console.log(' message.toString()', message)
+        console.log(' message.toString()', messageStr)
          // Check if the message is a device ID assignment
         if (!deviceId && messageStr.startsWith('deviceId:')) {
             deviceId = messageStr.split(':')[1];
