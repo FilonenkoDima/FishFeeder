@@ -31,11 +31,13 @@ wss.on('connection', function connection(ws, req) {
     ws.on('message', function incoming(message) {
         // Convert message to string
         const messageStr = message.toString();
-        console.log('messageStr', messageStr)
-
-        // Check if the message is a device ID assignment
+        console.log(' message.toString()', message)
+         // Check if the message is a device ID assignment
         if (!deviceId && messageStr.startsWith('deviceId:')) {
             deviceId = messageStr.split(':')[1];
+            console.debug('messageStr.split',  messageStr.split(':'))
+
+            console.log('deviceId', deviceId)
             connections[deviceId] = ws;
             ws.send(`Device ${deviceId} connected`);
             console.log(`Device ${deviceId} connected`);
