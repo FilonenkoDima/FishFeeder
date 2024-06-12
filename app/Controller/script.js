@@ -1,12 +1,10 @@
 //#region server function
-//const SERVER = "127.0.0.1:3000";
 const SERVER = "fishfeeder-69of.onrender.com";
 const FeederID = "esp32-1";
 
-// connetect to websocket server
-//--------------------- Start of WebSocket connection ---------------------
-const deviceId = 'Web'; // Set your device ID here
-const socket = new WebSocket('wss://'+SERVER);
+// connect to WebSocket server
+const deviceId = 'web'; // Set your device ID here
+const socket = new WebSocket('wss://' + SERVER);
 
 // Connection opened
 socket.addEventListener('open', function (event) {
@@ -16,21 +14,17 @@ socket.addEventListener('open', function (event) {
 
 // Listen for messages
 socket.addEventListener('message', function (event) {
-    console.log('Message from server', event.data);
+    console.log('Message from server11', event.data);
     const message = event.data;
-    const parsedMessage = message.split(': '); // Assuming the format is "ID: value"
-    // Display received message in the messages div
-    const messagesDiv = document.getElementById('messages');
-    const messageElement = document.createElement('p');
-     // Check if the sender ID is 'esp32-1'
-  if (parsedMessage[0] === 'esp32-1') {
-      // Update the UI with the new value
-      setProgress(parseInt(parsedMessage[1], 10));
-    }
-
+   
+    const parsedMessage = message.split(':'); // Assuming the format is "ID:value"
     
+    // Check if the sender ID is 'esp32-1'
+    if (parsedMessage[0] === FeederID) {
+        // Update the UI with the new value
+        setProgress(parseInt(parsedMessage[1], 10));
+    }
 });
-
 
 // Connection closed
 socket.addEventListener('close', function (event) {
@@ -42,10 +36,8 @@ socket.addEventListener('error', function (event) {
     console.error('WebSocket error observed:', event);
 });
 
-
 // Initialize the page when DOM content is loaded
 document.addEventListener("DOMContentLoaded", initializePage);
-
 
 function initializePage() {
   fetchConfig();
@@ -58,7 +50,7 @@ function initializePage() {
 // Fetches configuration from the server
 async function fetchConfig() {
   try {
-    const response = await fetch('https://'+SERVER+'/config');
+    const response = await fetch('https://' + SERVER + '/config');
     if (!response.ok) { // Check if the response is successful
       throw new Error('Network response was not ok ' + response.statusText);
     }
@@ -82,7 +74,7 @@ async function updateConfig() {
   const config = getConfig();
 
   try {
-    const response = await fetch('https://'+SERVER+'/config', {
+    const response = await fetch('https://' + SERVER + '/config', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -141,11 +133,6 @@ function toggleWeightActive(quantityValue) {
 //#region feed now button
 
 // Feed now button
-// let feed = 0;
-// function feedNow() {
-//   feed = 1;
-//   updateConfig();
-// }
 function feedNow() {
   feed = 1;  // Set feed to indicate feeding now
   socket.send('feedNow:' + feed);  // Send "feedNow" message with value to the WebSocket server
@@ -337,6 +324,5 @@ function addStore() {
   showPlanerInfo(timers, newDayInterval || getRepeatDay());
   updateConfig();
 }
-
 
 //#endregion
