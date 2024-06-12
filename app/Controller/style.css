@@ -52,13 +52,81 @@ footer {
   padding: 1.2rem;
   border: solid var(--header-footer-bg);
   border-radius: 2rem;
-
 }
 
 footer {
   padding: 2rem;
   font-size: 1.4rem;
   width: 100%;
+}
+
+.logo__fish {
+  float: left;
+  width: 20%;
+}
+
+.title {
+  float: right;
+  width: 80%;
+  text-align: right; /*Align the text to the right */
+}
+
+.feeder_header::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.feeder_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: solid 1px #cadeef;
+}
+
+.title_feeder {
+  font-size: 20px;
+  text-align: center;
+  justify-content: center; /* Horizontal center alignment */
+  align-items: center;
+  height: 100%;
+}
+
+.title_text {
+  justify-self: center;
+
+  font-size: 20px;
+  text-align: center;
+  justify-content: center; /* Horizontal center alignment */
+  align-items: center;
+  height: 100%;
+}
+
+.logo__kpi {
+  float: left;
+  width: 15%;
+}
+
+.feeder_footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2rem;
+  margin-top: 3rem;
+  border-top: solid 1px #cadeef;
+  gap: 5rem;
+}
+
+.settings {
+  width: 100%;
+  margin-top: 5rem;
+}
+
+p {
+  text-align: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 900px) {
@@ -73,21 +141,17 @@ footer {
     align-items: center;
     font-family: "Poppins", sans-serif;
     background: var(--background);
-    padding: 5% 0;
-  }
-
-  .components,
-  .components2 {
-    width: 60%;
-    height: 60%;
-    border-radius: 3rem;
-    box-shadow: 0.8rem 0.8rem 1.4rem var(--greyLight-2),
-      -0.2rem -0.2rem 1.8rem var(--white);
-    padding: 4rem;
-    background: white;
+    /* padding: 5% 0; */
   }
 
   .components {
+    /* width: 60%; */
+    /* height: 60%; */
+    /* border-radius: 3rem; */
+    /* box-shadow: 0.8rem 0.8rem 1.4rem var(--greyLight-2), */
+    /* -0.2rem -0.2rem 1.8rem var(--white); */
+    /* padding: 2rem; */
+    /* background: white; */
     display: grid;
     grid-template-columns: 2fr minmax(2rem, 1fr);
     grid-template-rows: repeat(auto-fit, min-content);
@@ -95,7 +159,26 @@ footer {
     justify-items: center;
   }
 
-  .components2 {
+  .componentsss {
+    width: 60%;
+    height: 60%;
+    border-radius: 3rem;
+    box-shadow: 0.8rem 0.8rem 1.4rem var(--greyLight-2),
+      -0.2rem -0.2rem 1.8rem var(--white);
+    padding: 2rem;
+    background: white;
+    justify-items: center;
+  }
+
+  .componentsss2 {
+    width: 60%;
+    height: 60%;
+    border-radius: 3rem;
+    box-shadow: 0.8rem 0.8rem 1.4rem var(--greyLight-2),
+      -0.2rem -0.2rem 1.8rem var(--white);
+    padding: 2rem;
+    background: white;
+    justify-items: center;
     display: none;
   }
 
@@ -291,8 +374,8 @@ footer {
   .time-planner {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    grid-template-rows: repeat(auto-fit, minmax(content, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(content, 1fr)); */
     justify-items: center;
     align-items: center;
     padding-bottom: 3rem;
@@ -1288,10 +1371,8 @@ footer {
   }
 }
 
-
-
-
-/*  Khaldon changes  */
+/*
+ Khaldon changes 
 #logo {
   float: left;
   width: 20%;
@@ -1299,37 +1380,32 @@ footer {
 #title {
   float: right;
   width: 80%;
-  text-align: right; /* Align the text to the right */
+  text-align: right; Align the text to the right
 }
-/* Clearfix to ensure the parent element encompasses the floated children */
+Clearfix to ensure the parent element encompasses the floated children
 #feeder_header::after {
   content: "";
   display: table;
   clear: both;
 }
-.title_text
-{
+.title_text {
   font-size: 20px;
 }
-
-
-
-
-
 
 $goldfish-sprite: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/159368/goldfish-sprite.png";
 $oceanscene: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/159368/oceanscene.jpg";
 
-body{
+body {
   perspective: 800px;
-  background: url($oceanscene) 50% 50%, linear-gradient(to top, #7f7fd5, #86a8e7, #91eae4);
+  background: url($oceanscene) 50% 50%,
+    linear-gradient(to top, #7f7fd5, #86a8e7, #91eae4);
   background-size: cover;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   transition: 300ms ease-out;
-  &:hover{
+  &:hover {
     perspective: 1000px;
   }
 }
@@ -1346,8 +1422,8 @@ $icon-home: x y offset_x offset_y width height total_width total_height image_pa
 
 At the bottom of this section, we provide information about the spritesheet itself
 $spritesheet: width height image $spritesheet-sprites;
-*/
-$fish-back-bottom-fin-name: 'fish--back-bottom-fin';
+ 
+$fish-back-bottom-fin-name: "fish--back-bottom-fin";
 $fish-back-bottom-fin-x: 208px;
 $fish-back-bottom-fin-y: 169px;
 $fish-back-bottom-fin-offset-x: -208px;
@@ -1356,9 +1432,20 @@ $fish-back-bottom-fin-width: 73px;
 $fish-back-bottom-fin-height: 68px;
 $fish-back-bottom-fin-total-width: 520px;
 $fish-back-bottom-fin-total-height: 387px;
-$fish-back-bottom-fin-image: '../img/sprite.png';
-$fish-back-bottom-fin: (208px, 169px, -208px, -169px, 73px, 68px, 520px, 387px, $goldfish-sprite, 'fish--back-bottom-fin', );
-$fish-back-fin-name: 'fish--back-fin';
+$fish-back-bottom-fin-image: "../img/sprite.png";
+$fish-back-bottom-fin: (
+  208px,
+  169px,
+  -208px,
+  -169px,
+  73px,
+  68px,
+  520px,
+  387px,
+  $goldfish-sprite,
+  "fish--back-bottom-fin"
+);
+$fish-back-fin-name: "fish--back-fin";
 $fish-back-fin-x: 0px;
 $fish-back-fin-y: 0px;
 $fish-back-fin-offset-x: 0px;
@@ -1367,9 +1454,20 @@ $fish-back-fin-width: 208px;
 $fish-back-fin-height: 263px;
 $fish-back-fin-total-width: 520px;
 $fish-back-fin-total-height: 387px;
-$fish-back-fin-image: '../img/sprite.png';
-$fish-back-fin: (0px, 0px, 0px, 0px, 208px, 263px, 520px, 387px, $goldfish-sprite, 'fish--back-fin', );
-$fish-body-name: 'fish--body';
+$fish-back-fin-image: "../img/sprite.png";
+$fish-back-fin: (
+  0px,
+  0px,
+  0px,
+  0px,
+  208px,
+  263px,
+  520px,
+  387px,
+  $goldfish-sprite,
+  "fish--back-fin"
+);
+$fish-body-name: "fish--body";
 $fish-body-x: 208px;
 $fish-body-y: 0px;
 $fish-body-offset-x: -208px;
@@ -1378,9 +1476,20 @@ $fish-body-width: 312px;
 $fish-body-height: 169px;
 $fish-body-total-width: 520px;
 $fish-body-total-height: 387px;
-$fish-body-image: '../img/sprite.png';
-$fish-body: (208px, 0px, -208px, 0px, 312px, 169px, 520px, 387px, $goldfish-sprite, 'fish--body', );
-$fish-front-bottom-fin-name: 'fish--front-bottom-fin';
+$fish-body-image: "../img/sprite.png";
+$fish-body: (
+  208px,
+  0px,
+  -208px,
+  0px,
+  312px,
+  169px,
+  520px,
+  387px,
+  $goldfish-sprite,
+  "fish--body"
+);
+$fish-front-bottom-fin-name: "fish--front-bottom-fin";
 $fish-front-bottom-fin-x: 281px;
 $fish-front-bottom-fin-y: 169px;
 $fish-front-bottom-fin-offset-x: -281px;
@@ -1389,9 +1498,20 @@ $fish-front-bottom-fin-width: 51px;
 $fish-front-bottom-fin-height: 65px;
 $fish-front-bottom-fin-total-width: 520px;
 $fish-front-bottom-fin-total-height: 387px;
-$fish-front-bottom-fin-image: '../img/sprite.png';
-$fish-front-bottom-fin: (281px, 169px, -281px, -169px, 51px, 65px, 520px, 387px, $goldfish-sprite, 'fish--front-bottom-fin', );
-$fish-top-fin-name: 'fish--top-fin';
+$fish-front-bottom-fin-image: "../img/sprite.png";
+$fish-front-bottom-fin: (
+  281px,
+  169px,
+  -281px,
+  -169px,
+  51px,
+  65px,
+  520px,
+  387px,
+  $goldfish-sprite,
+  "fish--front-bottom-fin"
+);
+$fish-top-fin-name: "fish--top-fin";
 $fish-top-fin-x: 0px;
 $fish-top-fin-y: 263px;
 $fish-top-fin-offset-x: 0px;
@@ -1400,13 +1520,30 @@ $fish-top-fin-width: 150px;
 $fish-top-fin-height: 124px;
 $fish-top-fin-total-width: 520px;
 $fish-top-fin-total-height: 387px;
-$fish-top-fin-image: '../img/sprite.png';
-$fish-top-fin: (0px, 263px, 0px, -263px, 150px, 124px, 520px, 387px, $goldfish-sprite, 'fish--top-fin', );
+$fish-top-fin-image: "../img/sprite.png";
+$fish-top-fin: (
+  0px,
+  263px,
+  0px,
+  -263px,
+  150px,
+  124px,
+  520px,
+  387px,
+  $goldfish-sprite,
+  "fish--top-fin"
+);
 $spritesheet-width: 520px;
 $spritesheet-height: 387px;
 $spritesheet-image: $goldfish-sprite;
-$spritesheet-sprites: ($fish-back-bottom-fin, $fish-back-fin, $fish-body, $fish-front-bottom-fin, $fish-top-fin, );
-$spritesheet: (520px, 387px, $goldfish-sprite, $spritesheet-sprites, );
+$spritesheet-sprites: (
+  $fish-back-bottom-fin,
+  $fish-back-fin,
+  $fish-body,
+  $fish-front-bottom-fin,
+  $fish-top-fin
+);
+$spritesheet: (520px, 387px, $goldfish-sprite, $spritesheet-sprites);
 
 @mixin sprite-width($sprite) {
   width: nth($sprite, 5);
@@ -1419,7 +1556,7 @@ $spritesheet: (520px, 387px, $goldfish-sprite, $spritesheet-sprites, );
 @mixin sprite-position($sprite) {
   $sprite-offset-x: nth($sprite, 3);
   $sprite-offset-y: nth($sprite, 4);
-  background-position: $sprite-offset-x  $sprite-offset-y;
+  background-position: $sprite-offset-x $sprite-offset-y;
 }
 
 @mixin sprite-image($sprite) {
@@ -1439,7 +1576,7 @@ The `sprites` mixin generates identical output to the CSS template
   but can be overridden inside of SCSS
 
 @include sprites($spritesheet-sprites);
-*/
+
 @mixin sprites($sprites) {
   @each $sprite in $sprites {
     $sprite-name: nth($sprite, 10);
@@ -1451,56 +1588,71 @@ The `sprites` mixin generates identical output to the CSS template
 
 /* 
   CSS ANIMATIONS
-*/
 
 
 @keyframes rotatingAnimation {
-  0%{
-    transform: translate3d(0,0,0px) rotateY(0deg)
+  0% {
+    transform: translate3d(0, 0, 0px) rotateY(0deg);
   }
   100% {
-    transform: translate3d(0,0,0px) rotateY(360deg);
+    transform: translate3d(0, 0, 0px) rotateY(360deg);
   }
 }
 
-$fishSize:0.5;
+$fishSize: 0.5;
 @keyframes swimmingAnimation {
   0% {
-    transform: translate3d(0,0,300px) scale($fishSize) rotateY(-10deg);
+    transform: translate3d(0, 0, 300px) scale($fishSize) rotateY(-10deg);
   }
-  100%{
-    transform: translate3d(0,0,300px) scale($fishSize) rotateY(10deg);
-  } 
+  100% {
+    transform: translate3d(0, 0, 300px) scale($fishSize) rotateY(10deg);
+  }
 }
 
 @keyframes wiggle-end {
-  0%   { transform: rotateY(-10deg); }
-  100% { transform: rotateY(10deg); }
+  0% {
+    transform: rotateY(-10deg);
+  }
+  100% {
+    transform: rotateY(10deg);
+  }
 }
 
 @keyframes wiggle-body {
-  0%   { transform: rotateY(-10deg); }
-  100% { transform: rotateY(10deg); }
+  0% {
+    transform: rotateY(-10deg);
+  }
+  100% {
+    transform: rotateY(10deg);
+  }
 }
 
 @keyframes fish-lift {
-  0%   { transform: translate(0px, 12px); }
-  100% { transform: translate(0px, -12px); }
+  0% {
+    transform: translate(0px, 12px);
+  }
+  100% {
+    transform: translate(0px, -12px);
+  }
 }
 @keyframes fish-roll {
-  0%   { transform: rotateX(-10deg); }
-  100% { transform: rotateX(10deg); }
+  0% {
+    transform: rotateX(-10deg);
+  }
+  100% {
+    transform: rotateX(10deg);
+  }
 }
 
 /*
   Fish Styling
-*/
 
-.fish-wrapper{
+
+.fish-wrapper {
   transform-style: preserve-3d;
   animation: rotatingAnimation 10000ms infinite linear;
 }
-.fish-container{
+.fish-container {
   position: absolute;
   z-index: 500;
   left: 50%;
@@ -1509,16 +1661,16 @@ $fishSize:0.5;
   perspective: 10000px;
   transform-style: preserve-3d;
 
-  .fish-body{
+  .fish-body {
     @include sprite($fish-body);
-    top: $fish-body-height * -.5;
-    left: $fish-body-width * -.5;
-    &.front{
+    top: $fish-body-height * -0.5;
+    left: $fish-body-width * -0.5;
+    &.front {
       z-index: 300;
       transform-origin: 100% 50%;
       transform: rotateY(5deg);
     }
-    &.back{
+    &.back {
       z-index: 100;
       transform-origin: 100% 50%;
       transform: rotateY(-5deg);
@@ -1531,22 +1683,22 @@ $fishSize:0.5;
     transform-origin: 50% 100%;
     animation: fish-roll 1750ms infinite alternate ease-in-out;
   }
-  .fish-back-bottom-fin{
+  .fish-back-bottom-fin {
     @include sprite($fish-back-bottom-fin);
     left: -106px;
     top: 61px;
-    &.front{
+    &.front {
       z-index: 300;
       transform-origin: 50% 0%;
       animation: fish-roll 1750ms infinite alternate ease-in-out;
     }
-    &.back{
+    &.back {
       z-index: 100;
       transform-origin: 50% 0%;
       animation: fish-roll 1750ms infinite alternate-reverse ease-in-out;
     }
   }
-  .fish-back-fin{
+  .fish-back-fin {
     @include sprite($fish-back-fin);
     left: -320px;
     top: -91px;
@@ -1554,17 +1706,17 @@ $fishSize:0.5;
     transform-origin: 105% 0;
     animation: wiggle-end 200ms infinite alternate ease-in-out;
   }
-  .fish-front-bottom-fin{
+  .fish-front-bottom-fin {
     @include sprite($fish-front-bottom-fin);
     left: -1px;
     top: 46px;
-    &.front{
+    &.front {
       z-index: 300;
       transform-origin: 50% 0%;
       transform-origin: 50% 0%;
       animation: fish-roll 1750ms infinite alternate ease-in-out;
     }
-    &.back{
+    &.back {
       z-index: 100;
       transform-origin: 50% 0%;
       transform-origin: 50% 0%;
@@ -1572,12 +1724,13 @@ $fishSize:0.5;
     }
   }
 }
-.fish-parts{
+.fish-parts {
   transition: 250ms;
   transform-style: preserve-3d;
   animation: swimmingAnimation 1000ms infinite alternate ease-in-out;
-  > div{
+  > div {
     position: absolute;
     z-index: 200;
   }
 }
+*/

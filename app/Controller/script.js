@@ -184,7 +184,7 @@ function showPlanerInfo(repeat, interval) {
 
 // Toggle window
 function toggleDiv() {
-  $(".components, .components2").toggle();
+  $(".componentsss, .componentsss2").toggle();
 }
 
 //#endregion
