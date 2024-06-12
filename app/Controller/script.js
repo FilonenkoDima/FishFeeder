@@ -137,7 +137,7 @@ function toggleWeightActive(quantityValue) {
 function feedNow() {
   feed = 1; // Set feed to indicate feeding now
   const conf = getConfig();
-  socket.send("feedNow:" + feed + "-" + conf.quantity); // Send "feedNow" message with value to the WebSocket server
+  socket.send("feedNow-" + conf.quantity); // Send "feedNow" message with value to the WebSocket server
   //updateConfig(); // Update configuration as previously defined
 }
 

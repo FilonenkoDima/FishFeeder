@@ -101,6 +101,18 @@ void webSocketEvent(const WStype_t& type, uint8_t * payload, const size_t& lengt
 
     case WStype_TEXT:
       Serial.printf("[WSc] get text: %s\n", payload);
+      char part1[20]; 
+      char part2[20];
+      splitString((char*)payload, '-', part1, part2);
+        // Печать значений part1 и part2 для отладки
+  Serial.print("part1: ");
+  Serial.println(part1);
+  Serial.print("part2: ");
+  Serial.println(part2);
+      if(strcmp(part1, "web: feedNow") == 0){
+        Serial.print("feeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed - - - ");
+        FeedNow(atoi(part2));
+      }
       break;
 
     case WStype_BIN:
@@ -212,6 +224,26 @@ bool sendMessageToServer() {
   }
 }
 
+void splitString(const char* str, char delimiter, char* part1, char* part2) {
+    char temp[strlen(str) + 1];
+    strcpy(temp, str);
+    
+    char delim[2] = {delimiter, '\0'};
+    char* token = strtok(temp, delim);
+    if (token != nullptr) {
+        strcpy(part1, token);
+        token = strtok(nullptr, delim);
+        if (token != nullptr) {
+            strcpy(part2, token);
+        } else {
+            part2[0] = '\0'; // Если второй токен не найден, сделать part2 пустой строкой
+        }
+    } else {
+        part1[0] = '\0'; // Если первый токен не найден, сделать part1 пустой строкой
+        part2[0] = '\0'; // И part2 тоже
+    }
+}
+
 void setup() {
   Serial.begin(115200);
 
@@ -296,6 +328,7 @@ webSocket.loop();
 
     int hours = timeinfo.tm_hour;
     int minutes = timeinfo.tm_min;
+    int seconds = timeinfo.tm_sec;
 
     long timestamp1 = mktime(&startTimeInfo);
     long timestamp2 = mktime(&timeinfo);
@@ -305,7 +338,7 @@ webSocket.loop();
 
     if((int)jsonFromESP["repeat"] > 0){
 
-    if(daysDifference % (int)jsonFromESP["repeat"] == 0 && minutes == 0){
+    if(daysDifference % (int)jsonFromESP["repeat"] == 0 && minutes == 0 && seconds == 0 && seconds == 1 && seconds == 2){
       bool feed = false;
 
     // Iterate over the "interval" array
@@ -327,7 +360,6 @@ webSocket.loop();
 
 
   
-  delay(550);
+  delay(1000);
 }
-
 
