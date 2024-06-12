@@ -98,7 +98,6 @@ function toggleWeightActive(quantityValue) {
 let feed = 0;
 function feedNow() {
   feed = 1;
-  updateConfig();
 }
 
 //#endregion

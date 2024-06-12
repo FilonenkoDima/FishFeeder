@@ -24,7 +24,6 @@ const data = {
   quantity: 10,
   interval: ["14", "21", "11"],
   repeat: 1,
-  feedNow: 0,
 };
 
 writeData(data);

@@ -1,39 +1,39 @@
 //#region server function
-const SERVER = "fishfeeder-69of.onrender.com";
+const SERVER = "fishfeeder-824j.onrender.com";
 const FeederID = "esp32-1";
 
 // connect to WebSocket server
-const deviceId = 'web'; // Set your device ID here
-const socket = new WebSocket('wss://' + SERVER);
+const deviceId = "web"; // Set your device ID here
+const socket = new WebSocket("wss://" + SERVER);
 
 // Connection opened
-socket.addEventListener('open', function (event) {
-    console.log('Connected to WebSocket server');
-    socket.send(`deviceId:${deviceId}`); // Send device ID to the server
+socket.addEventListener("open", function (event) {
+  console.log("Connected to WebSocket server");
+  socket.send(`deviceId:${deviceId}`); // Send device ID to the server
 });
 
 // Listen for messages
-socket.addEventListener('message', function (event) {
-    console.log('Message from server11', event.data);
-    const message = event.data;
-   
-    const parsedMessage = message.split(':'); // Assuming the format is "ID:value"
-    
-    // Check if the sender ID is 'esp32-1'
-    if (parsedMessage[0] === FeederID) {
-        // Update the UI with the new value
-        setProgress(parseInt(parsedMessage[1], 10));
-    }
+socket.addEventListener("message", function (event) {
+  console.log("Message from server11", event.data);
+  const message = event.data;
+
+  const parsedMessage = message.split(":"); // Assuming the format is "ID:value"
+
+  // Check if the sender ID is 'esp32-1'
+  if (parsedMessage[0] === FeederID) {
+    // Update the UI with the new value
+    setProgress(parseInt(parsedMessage[1], 10));
+  }
 });
 
 // Connection closed
-socket.addEventListener('close', function (event) {
-    console.log('Disconnected from WebSocket server');
+socket.addEventListener("close", function (event) {
+  console.log("Disconnected from WebSocket server");
 });
 
 // Handle errors
-socket.addEventListener('error', function (event) {
-    console.error('WebSocket error observed:', event);
+socket.addEventListener("error", function (event) {
+  console.error("WebSocket error observed:", event);
 });
 
 // Initialize the page when DOM content is loaded
@@ -50,9 +50,10 @@ function initializePage() {
 // Fetches configuration from the server
 async function fetchConfig() {
   try {
-    const response = await fetch('https://' + SERVER + '/config');
-    if (!response.ok) { // Check if the response is successful
-      throw new Error('Network response was not ok ' + response.statusText);
+    const response = await fetch("https://" + SERVER + "/config");
+    if (!response.ok) {
+      // Check if the response is successful
+      throw new Error("Network response was not ok " + response.statusText);
     }
     const data = await response.json();
     updateUI(data);
@@ -74,7 +75,7 @@ async function updateConfig() {
   const config = getConfig();
 
   try {
-    const response = await fetch('https://' + SERVER + '/config', {
+    const response = await fetch("https://" + SERVER + "/config", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +97,7 @@ function getConfig() {
       document.getElementById("progressText").textContent.slice(0, -1),
       10
     ),
-    feedNow: feed,
+    //feedNow: feed,
     repeat: getRepeatDay(),
     interval: getInterval(),
   };
@@ -134,9 +135,10 @@ function toggleWeightActive(quantityValue) {
 
 // Feed now button
 function feedNow() {
-  feed = 1;  // Set feed to indicate feeding now
-  socket.send('feedNow:' + feed);  // Send "feedNow" message with value to the WebSocket server
-  updateConfig();  // Update configuration as previously defined
+  feed = 1; // Set feed to indicate feeding now
+  const conf = getConfig();
+  socket.send("feedNow:" + feed + "-" + conf.quantity); // Send "feedNow" message with value to the WebSocket server
+  //updateConfig(); // Update configuration as previously defined
 }
 
 //#endregion

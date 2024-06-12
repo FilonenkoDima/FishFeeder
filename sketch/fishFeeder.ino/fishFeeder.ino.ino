@@ -1,4 +1,13 @@
+#if !defined(ESP32)
+  #error This code is intended to run only on the ESP32 boards! Please check your Tools->Board setting.
+#endif
+
+#define _WEBSOCKETS_LOGLEVEL_     2
+
 #include <WiFi.h>
+#include <WiFiMulti.h>
+#include <WiFiClientSecure.h>
+#include <WebSocketsClient_Generic.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <ESP32Servo.h>
@@ -27,7 +36,97 @@ const int   daylightOffset_sec = 3600;
 
 struct tm startTimeInfo;
 
+WiFiMulti         WiFiMulti;
+WebSocketsClient  webSocket;
+const char* deviceId = "deviceId:esp32-1"; // Set your device ID here
 
+#define USE_SSL         true
+
+#if USE_SSL
+  #define WS_SERVER           "fishfeeder-824j.onrender.com"
+  #define WS_PORT             443
+#else
+  #define WS_SERVER           "192.168.2.86"
+  #define WS_PORT             8080
+#endif
+
+void hexdump(const void *mem, const uint32_t& len, const uint8_t& cols = 16)
+{
+  const uint8_t* src = (const uint8_t*) mem;
+
+  Serial.printf("\n[HEXDUMP] Address: 0x%08X len: 0x%X (%d)", (ptrdiff_t)src, len, len);
+
+  for (uint32_t i = 0; i < len; i++)
+  {
+    if (i % cols == 0)
+    {
+      Serial.printf("\n[0x%08X] 0x%08X: ", (ptrdiff_t)src, i);
+    }
+
+    Serial.printf("%02X ", *src);
+    src++;
+  }
+
+  Serial.printf("\n");
+}
+
+bool alreadyConnected = false;
+unsigned long lastTime = 0;
+const long interval = 1000;  // Interval at which to send message (milliseconds)
+int currentValue = 5;  // Initial value to send
+
+void webSocketEvent(const WStype_t& type, uint8_t * payload, const size_t& length)
+{
+  switch (type)
+  {
+    case WStype_DISCONNECTED:
+      if (alreadyConnected)
+      {
+        Serial.println("[WSc] Disconnected!");
+        alreadyConnected = false;
+      }
+      break;
+
+    case WStype_CONNECTED:
+    {
+      alreadyConnected = true;
+
+      Serial.print("[WSc] Connected to url: ");
+      Serial.println((char *) payload);
+
+      // send message to server when Connected
+      webSocket.sendTXT(deviceId);
+    }
+    break;
+
+    case WStype_TEXT:
+      Serial.printf("[WSc] get text: %s\n", payload);
+      break;
+
+    case WStype_BIN:
+      Serial.printf("[WSc] get binary length: %u\n", length);
+      hexdump(payload, length);
+      break;
+
+    case WStype_PING:
+      Serial.printf("[WSc] get ping\n");
+      break;
+
+    case WStype_PONG:
+      Serial.printf("[WSc] get pong\n");
+      break;
+
+    case WStype_ERROR:
+    case WStype_FRAGMENT_TEXT_START:
+    case WStype_FRAGMENT_BIN_START:
+    case WStype_FRAGMENT:
+    case WStype_FRAGMENT_FIN:
+      break;
+
+    default:
+      break;
+  }
+}
 
 float irRead() {
   int averaging = 0;             
@@ -100,11 +199,24 @@ void writeFile(fs::FS &fs, const char *path, const char *message) {
 }
 
 
+bool sendMessageToServer() {
+  if (webSocket.isConnected()) {
+    String message = String(100 - (int)(irRead() / depthOfContainer * 100));
+    webSocket.sendTXT(message);
+    Serial.println(message);
+    return true;
+  } else {
+    Serial.println("WebSocket is not connected.");
+    return false;
+
+  }
+}
+
 void setup() {
   Serial.begin(115200);
 
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  WiFiMulti.addAP(ssid, password);
+  while (WiFiMulti.run() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
@@ -115,12 +227,37 @@ void setup() {
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
   getLocalTime(&startTimeInfo);
 
-  //disconnect WiFi as it's no longer needed
-  //WiFi.disconnect(true);
+  
+#if USE_SSL
+  webSocket.beginSSL(WS_SERVER, WS_PORT);
+#else
+  webSocket.begin(WS_SERVER, WS_PORT, "/");
+#endif
+
+  webSocket.onEvent(webSocketEvent);
+
+  webSocket.setReconnectInterval(5000);
+
+  webSocket.enableHeartbeat(15000, 3000, 2);
+
+  Serial.print("Connected to WebSockets Server @ IP address: ");
+  Serial.println(WS_SERVER);
+
 }
 
 void loop() {
-  if (WiFi.status() == WL_CONNECTED) {
+
+
+
+
+  if (WiFiMulti.run() == WL_CONNECTED) {
+
+          do{
+webSocket.loop();
+  }
+  while(!sendMessageToServer());
+      
+
     http.begin(serverURL);
 
     int httpCode = http.GET();
@@ -133,68 +270,10 @@ void loop() {
         if(!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)){
           Serial.println("SPIFFS Mount Failed");
           return;
-        }
-
-        if (!SPIFFS.exists("/data.json")){
-          writeFile(SPIFFS, "/data.json", docFromServer.c_str());
-        }
-
-
-        String docFromESP = readFile(SPIFFS, "/data.json");
-        if(docFromServer != docFromESP){
-          JsonDocument jsonFromServer, jsonFromESP;
-          deserializeJson(jsonFromServer, docFromServer);
-          deserializeJson(jsonFromESP, docFromESP);
-
-          //portion size
-          if(jsonFromESP["quantity"] != jsonFromServer["quantity"]){
-            jsonFromESP["quantity"] = jsonFromServer["quantity"];
-          }
-
-          //FeedNow
-          if(jsonFromESP["feedNow"] != jsonFromServer["feedNow"]){
-              jsonFromESP["feedNow"] = FeedNow(jsonFromESP["quantity"]);
-              jsonFromServer["feedNow"] = FeedNow(jsonFromESP["quantity"]);
-          }
-
-
-          //repeat
-          if(jsonFromESP["repeat"] != jsonFromServer["repeat"]){
-            jsonFromESP["repeat"] = jsonFromServer["repeat"];
-            struct tm timeinfo1;
-            if(!getLocalTime(&timeinfo1)){
-              Serial.println("Failed to obtain time");
-            }
-            startTimeInfo = timeinfo1;
-          }
-
-          // interval
-          if(jsonFromESP["interval"] != jsonFromServer["interval"]){
-            jsonFromESP["interval"] = jsonFromServer["interval"];
-          }
-
-          // procent
-          if(jsonFromServer["procent"] != jsonFromESP["procent"]){
-            jsonFromServer["procent"] = jsonFromESP["procent"];
-          }
-
-          //send to server
-          serializeJson(jsonFromServer, docFromServer);
-          serializeJson(jsonFromESP, docFromESP);
-          http.addHeader("Content-Type", "application/json");
-          int httpCode = http.POST(docFromServer);
-
-          if (httpCode > 0) {
-            if (httpCode == HTTP_CODE_OK) {
-              Serial.println("JSON file sent successfully");
-            } else {
-          Serial.print("Error: HTTP code ");
-          Serial.println(httpCode);
-            }
           }
 
           //write to file
-          writeFile(SPIFFS, "/data.json", docFromESP.c_str());
+          writeFile(SPIFFS, "/data.json", docFromServer.c_str());
         }
 
       } else {
@@ -204,28 +283,11 @@ void loop() {
     }
     http.end();
 
-  }
   if(SPIFFS.exists("/data.json")){
     String docFromESP = readFile(SPIFFS, "/data.json");
     JsonDocument jsonFromESP;
     deserializeJson(jsonFromESP, docFromESP);
 
-    Serial.println((int)(irRead() / depthOfContainer * 100));
-
-    if(jsonFromESP["procent"] != 100 - (int)(irRead() / depthOfContainer * 100)){
-
-      jsonFromESP["procent"] = (int)(irRead() / depthOfContainer * 100);
-      serializeJson(jsonFromESP, docFromESP);
-
-      //write to file
-      writeFile(SPIFFS, "/data.json", docFromESP.c_str());
-    }
-
-    
-    serializeJson(jsonFromESP, docFromESP);
-
-    //write to file
-    writeFile(SPIFFS, "/data.json", docFromESP.c_str());
 
     struct tm timeinfo;
     if(!getLocalTime(&timeinfo)){
@@ -265,7 +327,7 @@ void loop() {
 
 
   
-  delay(60 * 1000);
+  delay(550);
 }
 
 
