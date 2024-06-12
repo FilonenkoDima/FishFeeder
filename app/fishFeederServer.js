@@ -1,23 +1,17 @@
 const cors = require('cors');
-
 const express = require("express");
 const fs = require("fs");
 const http = require("http");
 const WebSocket = require('ws');
+
 const app = express();
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
-console.log('port  '+    process.env.PORT )
+console.log('port ' + process.env.PORT);
 
-// const PORT = 3000;
-
-// Create an HTTP server from express app
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-// const wss = new WebSocket.Server({ port: PORT });
-
-
 
 const filePath = "./data.json"; // Path to the JSON file that stores your configuration
 
@@ -29,13 +23,11 @@ wss.on('connection', function connection(ws, req) {
     let deviceId = null;
 
     ws.on('message', function incoming(message) {
-        // Convert message to string
         const messageStr = message.toString();
-        console.log('massage from Device ', messageStr)
-         // Check if the message is a device ID assignment
+        
+        // Check if the message is a device ID assignment
         if (!deviceId && messageStr.startsWith('deviceId:')) {
             deviceId = messageStr.split(':')[1];
-            console.log('deviceId', deviceId)
             connections[deviceId] = ws;
             ws.send(`${deviceId} connected`);
             console.log(`Device ${deviceId} connected`);
@@ -46,9 +38,9 @@ wss.on('connection', function connection(ws, req) {
         if (deviceId) {
             console.log(`Received from ${deviceId}: ${messageStr}`);
 
-            // Broadcast to all clients
+            // Broadcast to all clients except the sender
             wss.clients.forEach(function each(client) {
-                if (client.readyState === WebSocket.OPEN) {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
                     client.send(`${deviceId}: ${messageStr}`);
                 }
             });

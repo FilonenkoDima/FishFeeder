@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
-console.log('port'+    process.env.PORT )
+console.log('port  '+    process.env.PORT )
 
 // const PORT = 3000;
 
@@ -31,12 +31,13 @@ wss.on('connection', function connection(ws, req) {
     ws.on('message', function incoming(message) {
         // Convert message to string
         const messageStr = message.toString();
-
-        // Check if the message is a device ID assignment
+        // console.log('massage from Device ', messageStr)
+         // Check if the message is a device ID assignment
         if (!deviceId && messageStr.startsWith('deviceId:')) {
             deviceId = messageStr.split(':')[1];
+            console.log('deviceId', deviceId)
             connections[deviceId] = ws;
-            ws.send(`Device ${deviceId} connected`);
+            ws.send(`${deviceId} connected`);
             console.log(`Device ${deviceId} connected`);
             return;
         }
