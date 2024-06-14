@@ -161,16 +161,21 @@ float irRead() {
 
 int FeedNow(int portionSize){
   
-        // servo
-        myServo.attach(15);
-        myServo.write(0); 
-        int portion = portionSize * 600;
-        delay(portion); 
-        myServo.detach();
+  // servo
+  myServo.attach(15);
+  myServo.write(0); 
+  int portion = portionSize * 600;
+  delay(portion); 
+  myServo.detach();
 
-        Serial.println("FeedNow");
-
-        return 0;
+  if (webSocket.isConnected()) {  
+    webSocket.sendTXT("Годування завершено.");
+    Serial.println("FeedNow");
+  } else {
+    Serial.println("WebSocket is not connected.");
+  }
+  
+  return 0;
 }
 
 
