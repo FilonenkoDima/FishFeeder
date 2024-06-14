@@ -27,77 +27,118 @@
     />
     <link rel="stylesheet" href="style.css" />
   </head>
-
   <body translate="no">
     <div class="page">
-      <header>
-        Роботизована система для годування риб з дистанційним керуванням
-      </header>
       <div class="container">
-        <div class="components" id="1">
-          <div class="menu">
-            <div class="settings">
-              <div class="gram-container" id="gram-container">
-                <div
-                  class="btn btn__gram"
-                  id="weight10"
-                  onclick="toggleWeightActive('10')"
-                >
-                  <p id="data_10">10 грам</p>
-                </div>
-                <div
-                  class="btn btn__gram"
-                  id="weight20"
-                  onclick="toggleWeightActive('20')"
-                >
-                  <p id="data_20">20 грам</p>
-                </div>
-                <div
-                  class="btn btn__gram"
-                  id="weight30"
-                  onclick="toggleWeightActive('30')"
-                >
-                  <p id="data_30">30 грам</p>
-                </div>
-              </div>
+        <div class="componentsss" id="1">
+          <div class="feeder_header" id="feeder_header">
+            <div class="logo__fish" id="logo">
+              <img src="logo.png" alt="logo" class="logo" style="width: 100%" />
             </div>
-            <div class="feed-menu">
-              <div class="time-planner">
-                <div class="text-plan" id="text-plan"></div>
-                <div class="btn btn__secondary" onclick="toggleDiv()">
-                  <p>Запланувати</p>
-                </div>
-              </div>
-              <div class="btn btn__primary feed-button" onclick="feedNow()">
-                <p>Погодувати</p>
-              </div>
+            <div class="title_feeder" id="title">
+              Роботизована система для годування риб з дистанційним керуванням
             </div>
           </div>
-          <div class="progress-container">
-            <div class="barcontainer">
-              <div class="bar" id="progressBar" style="height: 70%"></div>
+          <div class="components">
+            <div class="menu">
+              <div class="feed-menu">
+                <div class="time-planner">
+                  <div class="text-plan" id="text-plan"></div>
+                  <div class="btn btn__secondary" onclick="toggleDiv()">
+                    <p>Запланувати</p>
+                  </div>
+                </div>
+                <div class="message-field" id="message-field">
+                  Тут відображаються отримані повідомлення
+                </div>
+                <div class="settings">
+                  <div class="gram-container" id="gram-container">
+                    <div
+                      class="btn btn__gram"
+                      id="weight10"
+                      onclick="toggleWeightActive('10')"
+                    >
+                      <p id="data_10">10 грам</p>
+                    </div>
+                    <div
+                      class="btn btn__gram"
+                      id="weight20"
+                      onclick="toggleWeightActive('20')"
+                    >
+                      <p id="data_20">20 грам</p>
+                    </div>
+                    <div
+                      class="btn btn__gram"
+                      id="weight30"
+                      onclick="toggleWeightActive('30')"
+                    >
+                      <p id="data_30">30 грам</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn btn__primary feed-button" onclick="feedNow()">
+                  <p>Погодувати</p>
+                </div>
+              </div>
             </div>
-            <span class="progressText" id="progressText"></span>
+
+            <div class="progress-container">
+              <div class="barcontainer">
+                <div class="bar" id="progressBar" style="height: 70%"></div>
+              </div>
+              <span class="progressText" id="progressText"></span>
+            </div>
+          </div>
+          <div class="feeder_footer">
+            <div class="logo__kpi">
+              <img src="kpi.png" alt="logo" class="logo" style="width: 100%" />
+            </div>
+            <div class="title_feeder" id="title">
+              Студент: Філоненко Дмитро Валерійович ІК-03
+              <br />
+              Дипломний керівник: Араффа Хальдун Осман
+            </div>
           </div>
         </div>
-        <div class="components2" id="2">
-          <div class="icon_arrow" onclick="toggleDiv()" id="return__back">
-            <div class="icon__return">
-              <ion-icon name="arrow-back"></ion-icon>
+
+        <div class="componentsss2" id="1">
+          <div class="feeder_header" id="feeder_header">
+            <div class="logo__fish" id="logo">
+              <img src="logo.png" alt="logo" class="logo" style="width: 100%" />
+            </div>
+            <div class="title_feeder" id="title">
+              Роботизована система для годування риб з дистанційним керуванням
             </div>
           </div>
-          <div id="wrapper" class="wrapper">
-            <div class="interval-container">
-              <p class="feedText" id="feedText">Годувати кожен день</p>
-              <div class="btn btn__primary" onclick="toggleModalDay()">
-                <p>Змінити інтервал</p>
+          <div class="components2" id="2">
+            <div class="icon_arrow" onclick="toggleDiv()" id="return__back">
+              <div class="icon__return">
+                <ion-icon name="arrow-back"></ion-icon>
               </div>
             </div>
-            <div class="containerTimer" id="timer"></div>
-            <div class="icon iconAddWeight" onclick="toggleModalTime()">
-              <div class="icon__add">
-                <ion-icon name="add"></ion-icon>
+            <div id="wrapper" class="wrapper">
+              <div class="interval-container">
+                <p class="feedText" id="feedText">Годувати кожен день</p>
+                <div class="btn btn__primary" onclick="toggleModalDay()">
+                  <p>Змінити інтервал</p>
+                </div>
               </div>
+              <div class="containerTimer" id="timer"></div>
+              <div class="icon iconAddWeight" onclick="toggleModalTime()">
+                <div class="icon__add">
+                  <ion-icon name="add"></ion-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="feeder_footer">
+            <div class="logo__kpi">
+              <img src="kpi.png" alt="logo" class="logo" style="width: 100%" />
+            </div>
+            <div class="title_feeder" id="title">
+              Студент: Філоненко Дмитро Валерійович ІК-03
+              <br />
+              Дипломний керівник: Араффа Хальдун Осман
             </div>
           </div>
         </div>
@@ -171,12 +212,9 @@
           <div class="overlay" onclick="toggleModalDay()"></div>
         </div>
       </div>
-
-      <footer>
-        Студент: Філоненко Дмитро Валерійович ІК-03
-        <br />
-        Дипломний керівник: Араффа Хальдун Осман
-      </footer>
+      <div class="container">
+        <div id="messages"></div>
+      </div>
     </div>
     <script id="rendered-js" src="script.js"></script>
   </body>

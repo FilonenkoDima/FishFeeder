@@ -1,8 +1,49 @@
 //#region server function
+const SERVER = "fishfeeder-824j.onrender.com";
+const FeederID = "esp32-1";
+
+// connect to WebSocket server
+const deviceId = "web"; // Set your device ID here
+const socket = new WebSocket("wss://" + SERVER);
+
+// Connection opened
+socket.addEventListener("open", function (event) {
+  console.log("Connected to WebSocket server");
+  showMessage("Під'єднано до сервера");
+  socket.send(`deviceId:${deviceId}`); // Send device ID to the server
+});
+
+// Listen for messages
+socket.addEventListener("message", function (event) {
+  console.log("Message from server11", event.data);
+  showMessage(`Повідомлення з сервера: ${event.data}`);
+  const message = event.data;
+
+  const parsedMessage = message.split(":"); // Assuming the format is "ID:value"
+
+  // Check if the sender ID is 'esp32-1'
+  if (parsedMessage[0] === FeederID) {
+    // Update the UI with the new value
+    setProgress(parseInt(parsedMessage[1], 10));
+    if (parsedMessage[1] <= 20)
+      showMessage("Наповніть контейнер, закінчується корм!!!");
+  }
+});
+
+// Connection closed
+socket.addEventListener("close", function (event) {
+  console.log("Disconnected from WebSocket server");
+  showMessage("Відключено від сервера");
+});
+
+// Handle errors
+socket.addEventListener("error", function (event) {
+  console.error("WebSocket error observed:", event);
+  showMessage(`Помилка сервера: ${event}`);
+});
 
 // Initialize the page when DOM content is loaded
 document.addEventListener("DOMContentLoaded", initializePage);
-
 
 function initializePage() {
   fetchConfig();
@@ -12,10 +53,18 @@ function initializePage() {
   });
 }
 
+function showMessage(message) {
+  $("#message-field").empty().append(`${message}`);
+}
+
 // Fetches configuration from the server
 async function fetchConfig() {
   try {
-    const response = await fetch("/config");
+    const response = await fetch("https://" + SERVER + "/config");
+    if (!response.ok) {
+      // Check if the response is successful
+      throw new Error("Network response was not ok " + response.statusText);
+    }
     const data = await response.json();
     updateUI(data);
   } catch (error) {
@@ -36,7 +85,7 @@ async function updateConfig() {
   const config = getConfig();
 
   try {
-    const response = await fetch("/config", {
+    const response = await fetch("https://" + SERVER + "/config", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +107,7 @@ function getConfig() {
       document.getElementById("progressText").textContent.slice(0, -1),
       10
     ),
-    feedNow: feed,
+    //feedNow: feed,
     repeat: getRepeatDay(),
     interval: getInterval(),
   };
@@ -95,9 +144,11 @@ function toggleWeightActive(quantityValue) {
 //#region feed now button
 
 // Feed now button
-let feed = 0;
 function feedNow() {
-  feed = 1;
+  feed = 1; // Set feed to indicate feeding now
+  const conf = getConfig();
+  socket.send("feedNow-" + conf.quantity); // Send "feedNow" message with value to the WebSocket server
+  //updateConfig(); // Update configuration as previously defined
 }
 
 //#endregion
@@ -143,7 +194,7 @@ function showPlanerInfo(repeat, interval) {
 
 // Toggle window
 function toggleDiv() {
-  $(".components, .components2").toggle();
+  $(".componentsss, .componentsss2").toggle();
 }
 
 //#endregion
@@ -285,6 +336,5 @@ function addStore() {
   showPlanerInfo(timers, newDayInterval || getRepeatDay());
   updateConfig();
 }
-
 
 //#endregion
