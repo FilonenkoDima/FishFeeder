@@ -9,12 +9,14 @@ const socket = new WebSocket("wss://" + SERVER);
 // Connection opened
 socket.addEventListener("open", function (event) {
   console.log("Connected to WebSocket server");
+  showMessage("Під'єднано до сервера");
   socket.send(`deviceId:${deviceId}`); // Send device ID to the server
 });
 
 // Listen for messages
 socket.addEventListener("message", function (event) {
   console.log("Message from server11", event.data);
+  showMessage(`Повідомлення з сервера: ${event.data}`);
   const message = event.data;
 
   const parsedMessage = message.split(":"); // Assuming the format is "ID:value"
@@ -23,17 +25,21 @@ socket.addEventListener("message", function (event) {
   if (parsedMessage[0] === FeederID) {
     // Update the UI with the new value
     setProgress(parseInt(parsedMessage[1], 10));
+    if (parsedMessage[1] <= 20)
+      showMessage("Наповніть контейнер, закінчується корм!!!");
   }
 });
 
 // Connection closed
 socket.addEventListener("close", function (event) {
   console.log("Disconnected from WebSocket server");
+  showMessage("Відключено від сервера");
 });
 
 // Handle errors
 socket.addEventListener("error", function (event) {
   console.error("WebSocket error observed:", event);
+  showMessage(`Помилка сервера: ${event}`);
 });
 
 // Initialize the page when DOM content is loaded
@@ -45,6 +51,10 @@ function initializePage() {
     showPlanerInfo();
     showFeedText();
   });
+}
+
+function showMessage(message) {
+  $("#message-field").empty().append(`${message}`);
 }
 
 // Fetches configuration from the server
