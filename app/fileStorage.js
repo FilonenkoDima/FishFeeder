@@ -20,10 +20,11 @@ function writeData(data) {
 }
 
 const data = {
-  procent: 10,
-  quantity: 10,
-  interval: ["14", "21", "11"],
+  quantity: 30,
+  procent: 80,
+  feedNow: 0,
   repeat: 1,
+  interval: [7, 23],
 };
 
 writeData(data);

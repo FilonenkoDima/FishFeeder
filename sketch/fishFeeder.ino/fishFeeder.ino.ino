@@ -285,14 +285,10 @@ void setup() {
 void loop() {
 
 
-
-
   if (WiFiMulti.run() == WL_CONNECTED) {
-
-          do{
-webSocket.loop();
-  }
-  while(!sendMessageToServer());
+    do{
+      webSocket.loop();
+    } while(!sendMessageToServer());
       
 
     http.begin(serverURL);
